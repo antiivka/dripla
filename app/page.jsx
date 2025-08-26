@@ -1,27 +1,42 @@
+import HeaderMobile from "@/components/HeaderMobile";
+import BottomNav from "@/components/BottomNav";
+import FABs from "@/components/FABs";
+import DropCarousel from "@/components/DropCarousel";
+
+function ItemCard({ i }) {
+  return (
+    <div className="card p-4">
+      <div className="aspect-[4/5] bg-[#eee] rounded-lg mb-3" />
+      <div className="text-sm font-medium">Naziv predmeta #{i}</div>
+      <div className="text-sm text-ink2">3.500 RSD · kao novo</div>
+    </div>
+  );
+}
+
 export default function Page() {
   return (
-    <main className="mx-auto max-w-5xl px-6 py-16">
-      <header className="mb-10">
-        <h1 className="text-4xl font-semibold">Dripla</h1>
-        <p className="text-ink2 mt-2">
-          Kupi, prodaj, uštedi. Second-hand moda za bolje sutra.
-        </p>
-      </header>
-
-      <div className="flex items-center gap-3 mb-12">
-        <a href="#" className="btn-cta">Dodaj novi predmet</a>
-        <a href="#" className="btn-cta premium">Pogledaj dropove</a>
-      </div>
-
-      <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        {[1,2,3,4,5,6,7,8].map(i => (
-          <div key={i} className="card p-4">
-            <div className="aspect-[4/5] bg-[#eee] rounded-lg mb-3" />
-            <div className="text-sm font-medium">Naziv predmeta #{i}</div>
-            <div className="text-sm text-ink2">2.000 RSD · kao novo</div>
+    <>
+      <HeaderMobile />
+      <main className="mx-auto max-w-5xl px-4 pt-4 pb-20">
+        <header className="text-center my-4">
+          <h1 className="text-2xl font-semibold">Kupi, prodaj, uštedi.</h1>
+          <p className="text-ink2">Second-hand moda za bolje sutra.</p>
+          <div className="mt-4 flex justify-center">
+            <a href="/sell" className="btn-cta">Podeli svoj drip</a>
           </div>
-        ))}
-      </section>
-    </main>
+        </header>
+
+        <h2 className="text-lg font-semibold mb-3">Najnoviji komadi</h2>
+        <div className="grid grid-cols-2 gap-3">
+          {[1,2,3,4,5,6,7,8].map(n => <ItemCard key={n} i={n} />)}
+        </div>
+
+        <DropCarousel />
+      </main>
+
+      <FABs showDrop />
+
+      <BottomNav />
+    </>
   );
 }

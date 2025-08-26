@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---- Dripla brand tokens (NOT secrets) ---- */
+:root{
+  --bg:#F8F8F8;
+  --text:#222;
+  --text-2:#777;
+
+  /* gradients */
+  --cta-1-from:#2CD3A4;   /* green/blue */
+  --cta-1-to:#5CC9E4;
+  --cta-2-from:#FF8AA5;   /* pink/orange (premium) */
+  --cta-2-to:#FFA949;
+
+  --accent-purple:#B97EFF;
+  --accent-orange:#FFA949;
+}
+
+/* reusable UI helpers */
+.btn-cta{
+  @apply inline-flex items-center justify-center px-5 py-3 text-white font-medium rounded-pill;
+  background: linear-gradient(90deg,var(--cta-1-from),var(--cta-1-to));
+}
+.btn-cta.premium{
+  background: linear-gradient(90deg,var(--cta-2-from),var(--cta-2-to));
+}
+.card{
+  @apply rounded-2xl bg-white shadow-card;
+}

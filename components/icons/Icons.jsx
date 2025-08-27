@@ -13,12 +13,12 @@ function IconBase({
       width={size}
       height={size}
       fill="none"
-      stroke="currentColor"      // follows the element's CSS "color"
+      stroke="currentColor"           // uses CSS color
       strokeWidth={stroke}
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
-      style={style}              // <-- allow color via style={{ color: ... }}
+      style={style}                   // allow style={{ color: ... }}
       aria-hidden="true"
       focusable="false"
       {...rest}
@@ -48,7 +48,7 @@ export const IconHeart = (props) => (
   </IconBase>
 );
 
-/** Clean home: roof + walls + centered door */
+/** Home icon: roof + walls + centered door */
 export const IconHome = (props) => (
   <IconBase {...props}>
     <path d="M3 10.5L12 3l9 7.5" />
@@ -62,7 +62,7 @@ export const IconMessage = (props) => (
   </IconBase>
 );
 
-/** New, tidy gear icon (outline) */
+/** Clean, symmetrical gear that takes color via style/className */
 export const IconSettings = (props) => (
   <IconBase {...props}>
     <circle cx="12" cy="12" r="3" />

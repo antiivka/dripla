@@ -1,18 +1,27 @@
 // components/icons/Icons.jsx
-function IconBase({ children, size = 22, stroke = 1.8, className = "" }) {
+function IconBase({
+  children,
+  size = 22,
+  stroke = 1.8,
+  className = "",
+  style,
+  ...rest
+}) {
   return (
     <svg
       viewBox="0 0 24 24"
       width={size}
       height={size}
       fill="none"
-      stroke="currentColor"
+      stroke="currentColor"      // follows the element's CSS "color"
       strokeWidth={stroke}
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
+      style={style}              // <-- allow color via style={{ color: ... }}
       aria-hidden="true"
       focusable="false"
+      {...rest}
     >
       {children}
     </svg>
@@ -39,12 +48,10 @@ export const IconHeart = (props) => (
   </IconBase>
 );
 
-/** Clean, material-style home: roof + walls + centered door */
+/** Clean home: roof + walls + centered door */
 export const IconHome = (props) => (
   <IconBase {...props}>
-    {/* roof */}
     <path d="M3 10.5L12 3l9 7.5" />
-    {/* walls + door */}
     <path d="M5 10.5V21h5v-6h4v6h5V10.5" />
   </IconBase>
 );
@@ -52,5 +59,20 @@ export const IconHome = (props) => (
 export const IconMessage = (props) => (
   <IconBase {...props}>
     <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" />
+  </IconBase>
+);
+
+/** New, tidy gear icon (outline) */
+export const IconSettings = (props) => (
+  <IconBase {...props}>
+    <circle cx="12" cy="12" r="3" />
+    <path d="M12 2v3" />
+    <path d="M12 19v3" />
+    <path d="M2 12h3" />
+    <path d="M19 12h3" />
+    <path d="M4.22 4.22l2.12 2.12" />
+    <path d="M17.66 17.66l2.12 2.12" />
+    <path d="M4.22 19.78l2.12-2.12" />
+    <path d="M17.66 6.34l2.12-2.12" />
   </IconBase>
 );

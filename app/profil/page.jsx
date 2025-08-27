@@ -3,7 +3,7 @@ import BottomNav from "@/components/BottomNav";
 import FABs from "@/components/FABs";
 import { IconMessage, IconHeart, IconSettings } from "@/components/icons/Icons";
 
-/* Pastel quick-action card — tuned to match your mock */
+/* Pastel quick-action card */
 function QuickActionCard({ href, label, Icon, theme }) {
   const themes = {
     messages: { bg: "#E7F7FF", border: "#BEEBFF", icon: "#5CC9E4" },
@@ -15,13 +15,12 @@ function QuickActionCard({ href, label, Icon, theme }) {
   return (
     <a
       href={href}
-      className="block rounded-[24px] px-6 py-7 text-center border-2 shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] transition-shadow"
+      className="block rounded-[20px] px-5 py-5 text-center shadow-[0_2px_10px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow border"
       style={{ backgroundColor: t.bg, borderColor: t.border }}
     >
-      <div className="flex flex-col items-center gap-3">
-        {/* chunkier icon + tiny optical center */}
-        <Icon size={28} stroke={2.2} className="-translate-y-[1px]" style={{ color: t.icon }} />
-        <div className="font-semibold text-[18px] md:text-[20px] leading-none">{label}</div>
+      <div className="flex flex-col items-center gap-2">
+        <Icon size={24} style={{ color: t.icon }} />
+        <div className="font-semibold">{label}</div>
       </div>
     </a>
   );
@@ -67,8 +66,7 @@ export default function ProfilePage() {
 
         {/* Profile header with right-side pastel cards */}
         <section className="rounded-2xl bg-white shadow-card border border-black/5 p-4 sm:p-5 mb-6">
-          {/* widen right column so the buttons breathe */}
-          <div className="grid gap-5 lg:grid-cols-[1fr_260px]">
+          <div className="grid gap-4 lg:grid-cols-[1fr_220px]">
             {/* LEFT: avatar + bio */}
             <div className="flex items-start gap-4">
               <div className="h-16 w-16 sm:h-18 sm:w-18 rounded-full bg-[#eee]" />
@@ -92,7 +90,7 @@ export default function ProfilePage() {
             </div>
 
             {/* RIGHT: pastel action cards (stacked) */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
               <QuickActionCard href="/inbox" label="Poruke" Icon={IconMessage} theme="messages" />
               <QuickActionCard href="/settings" label="Podešavanja" Icon={IconSettings} theme="settings" />
               <QuickActionCard href="/wishlist" label="Moja lista želja" Icon={IconHeart} theme="wishlist" />

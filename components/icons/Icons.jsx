@@ -13,12 +13,12 @@ function IconBase({
       width={size}
       height={size}
       fill="none"
-      stroke="currentColor"           // uses CSS color
+      stroke="currentColor"
       strokeWidth={stroke}
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
-      style={style}                   // allow style={{ color: ... }}
+      style={style}
       aria-hidden="true"
       focusable="false"
       {...rest}
@@ -48,7 +48,6 @@ export const IconHeart = (props) => (
   </IconBase>
 );
 
-/** Home icon: roof + walls + centered door */
 export const IconHome = (props) => (
   <IconBase {...props}>
     <path d="M3 10.5L12 3l9 7.5" />
@@ -62,17 +61,12 @@ export const IconMessage = (props) => (
   </IconBase>
 );
 
-/** Clean, symmetrical gear that takes color via style/className */
+/** Proper cog (gear) with teeth — matches your mock */
 export const IconSettings = (props) => (
   <IconBase {...props}>
-    <circle cx="12" cy="12" r="3" />
-    <path d="M12 2v3" />
-    <path d="M12 19v3" />
-    <path d="M2 12h3" />
-    <path d="M19 12h3" />
-    <path d="M4.22 4.22l2.12 2.12" />
-    <path d="M17.66 17.66l2.12 2.12" />
-    <path d="M4.22 19.78l2.12-2.12" />
-    <path d="M17.66 6.34l2.12-2.12" />
+    {/* outer cog with teeth */}
+    <path d="M9.594 3.94c.09-.54.56-.94 1.11-.94h2.592c.55 0 1.02.4 1.11.94l.334 2.014c.78.3 1.5.72 2.166 1.25l1.806-.602a1.12 1.12 0 0 1 1.37.52l1.296 2.247c.25.433.17.98-.206 1.33l-1.537 1.4c.05.43.08.87.08 1.32s-.03.89-.08 1.32l1.537 1.4c.376.35.456.897.206 1.33l-1.296 2.247a1.12 1.12 0 0 1-1.37.52l-1.806-.602a8.13 8.13 0 0 1-2.166 1.25l-.334 2.014c-.09.54-.56.94-1.11.94H10.704c-.55 0-1.02-.4-1.11-.94l-.334-2.014a8.13 8.13 0 0 1-2.166-1.25l-1.806.602a1.12 1.12 0 0 1-1.37-.52L2.622 17.9a1.12 1.12 0 0 1 .206-1.33l1.537-1.4A8.85 8.85 0 0 1 3.5 12c0-.45.03-.89.08-1.32l-1.537-1.4a1.12 1.12 0 0 1-.206-1.33L3.133 5.68a1.12 1.12 0 0 1 1.37-.52l1.806.602a8.13 8.13 0 0 1 2.166-1.25l.334-2.014Z" />
+    {/* inner hub */}
+    <path d="M15 12a3 3 0 1 1-6 0a3 3 0 0 1 6 0Z" />
   </IconBase>
 );

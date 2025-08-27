@@ -5,8 +5,12 @@ import DropCarousel from "@/components/DropCarousel";
 
 function ItemCard({ i }) {
   return (
-    <div className="card p-4">
-      <div className="aspect-[4/5] bg-[#eee] rounded-lg mb-3" />
+    <div className="card p-4 overflow-hidden">
+      {/* Square image area */}
+      <div className="aspect-square bg-[#eee] rounded-lg mb-3" />
+      {/* For real images later:
+         <img src="..." alt="" className="w-full aspect-square object-cover rounded-lg mb-3" />
+      */}
       <div className="text-sm font-medium">Naziv predmeta #{i}</div>
       <div className="text-sm text-ink2">3.500 RSD · kao novo</div>
     </div>

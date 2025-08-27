@@ -12,11 +12,11 @@ import {
 } from '@/components/icons/Icons';
 
 const items = [
-  { href: '/',        label: 'Home',     Icon: IconHome },
-  { href: '/search',  label: 'Search',   Icon: IconSearch },
-  { href: '/inbox',   label: 'Inbox',    Icon: IconMessage },
-  { href: '/wishlist',label: 'Wishlist', Icon: IconHeart },
-  { href: '/profil',  label: 'Profile',  Icon: IconUser },
+  { href: '/',         label: 'Početna',   Icon: IconHome },
+  { href: '/search',   label: 'Pretraga',  Icon: IconSearch },
+  { href: '/inbox',    label: 'Poruke',    Icon: IconMessage },
+  { href: '/wishlist', label: 'Lista želja', Icon: IconHeart },
+  { href: '/profil',   label: 'Profil',    Icon: IconUser },
 ];
 
 export default function BottomNav() {
@@ -31,16 +31,18 @@ export default function BottomNav() {
       <div className="mx-auto max-w-5xl h-14 grid grid-cols-5 text-xs">
         {items.map(({ href, label, Icon }) => {
           const active = pathname === href;
+
           return (
             <Link
               key={href}
               href={gate(href)}
-              className={`flex flex-col items-center justify-center transition-colors ${
-                active ? 'text-[#2CD3A4]' : 'text-ink2 hover:text-ink'
-              }`}
               aria-current={active ? 'page' : undefined}
+              className={`flex flex-col items-center justify-center transition-colors ${
+                active ? 'text-ink' : 'text-ink2 hover:text-ink'
+              }`}
             >
-              <Icon size={22} />
+              {/* slight upward nudge so the icon baseline looks centered */}
+              <Icon size={22} className="-translate-y-[1px]" />
               <span className="mt-0.5">{label}</span>
             </Link>
           );

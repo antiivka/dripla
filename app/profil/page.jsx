@@ -1,28 +1,7 @@
 import HeaderMobile from "@/components/HeaderMobile";
 import BottomNav from "@/components/BottomNav";
 import FABs from "@/components/FABs";
-import { IconMessage, IconHeart } from "@/components/icons/Icons";
-
-/* Simple gear icon to match our outline set */
-function IconSettings({ size = 22, className = "" }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width={size}
-      height={size}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      aria-hidden="true"
-    >
-      <circle cx="12" cy="12" r="3" />
-      <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.03.03a2 2 0 1 1-2.83 2.83l-.03-.03A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-2 .6 1.7 1.7 0 0 0-.34 1.87l-.03.03a2 2 0 1 1-2.83-2.83l.03-.03A1.7 1.7 0 0 0 8.6 15a1.7 1.7 0 0 0-1.87-.34l-.03.03a2 2 0 1 1-2.83-2.83l.03-.03A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.6-2 1.7 1.7 0 0 0-1.87-.34l-.03-.03a2 2 0 1 1 2.83-2.83l.03.03A1.7 1.7 0 0 0 9 4.6c.3 0 .6-.1.87-.26A1.7 1.7 0 0 0 11 2.4v0a2 2 0 1 1 2 0v0c.14.5.46.93.87 1.26.27.16.57.26.87.26a1.7 1.7 0 0 0 1.87-.34l.03-.03a2 2 0 1 1 2.83 2.83l-.03.03A1.7 1.7 0 0 0 19.4 9c0 .3.1.6.26.87.16.27.26.57.26.87s-.1.6-.26.87c-.16.27-.26.57-.26.87Z" />
-    </svg>
-  );
-}
+import { IconMessage, IconHeart, IconSettings } from "@/components/icons/Icons";
 
 /* Pastel quick-action card */
 function QuickActionCard({ href, label, Icon, theme }) {
@@ -40,7 +19,7 @@ function QuickActionCard({ href, label, Icon, theme }) {
       style={{ backgroundColor: t.bg, borderColor: t.border }}
     >
       <div className="flex flex-col items-center gap-2">
-        <Icon size={24} className="" style={{ color: t.icon }} />
+        <Icon size={24} style={{ color: t.icon }} />
         <div className="font-semibold">{label}</div>
       </div>
     </a>

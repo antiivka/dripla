@@ -12,7 +12,10 @@ export default function HeaderMobile() {
     <>
       <header className="h-14 sticky top-0 z-20 bg-[var(--bg)]/90 backdrop-blur border-b border-black/5">
         <div className="mx-auto max-w-5xl h-full px-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-semibold">Dripla</Link>
+          import Image from "next/image";
+<Link href="/" className="block">
+  <Image src="/logo.png" alt="Dripla" width={120} height={36} priority />
+</Link>
 
           <div className="flex items-center gap-3">
             {/* Pretraga */}

@@ -39,10 +39,13 @@ export const IconHeart = (props) => (
   </IconBase>
 );
 
+/** Clean, material-style home: roof + walls + centered door */
 export const IconHome = (props) => (
   <IconBase {...props}>
-    <path d="M3 11l9-7 9 7" />
-    <path d="M9 22V12h6v10" />
+    {/* roof */}
+    <path d="M3 10.5L12 3l9 7.5" />
+    {/* walls + door */}
+    <path d="M5 10.5V21h5v-6h4v6h5V10.5" />
   </IconBase>
 );
 

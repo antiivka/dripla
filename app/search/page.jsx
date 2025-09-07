@@ -20,7 +20,8 @@ function SearchResultCard({ item }) {
 export default function SearchPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGender, setSelectedGender] = useState('sve');
-  const [selectedCategory, setSelectedCategory] = useState('sve');
+  const [selectedMainCategory, setSelectedMainCategory] = useState('sve');
+  const [selectedSubCategory, setSelectedSubCategory] = useState('sve');
   const [selectedSize, setSelectedSize] = useState('');
   const [priceRange, setPriceRange] = useState('sve');
   const [showFilters, setShowFilters] = useState(false);
@@ -35,49 +36,99 @@ export default function SearchPage() {
     { id: 6, name: 'Converse All Star', price: '5.000', condition: 'Odlično', size: '41' },
   ];
 
-  // Categories based on selected gender
-  const getCategories = () => {
-    if (selectedGender === 'zene') {
+  // Main categories
+  const mainCategories = [
+    { value: 'sve', label: 'Sve kategorije' },
+    { value: 'odeca', label: 'Odeća' },
+    { value: 'obuca', label: 'Obuća' },
+    { value: 'aksesoari', label: 'Aksesoari' }
+  ];
+
+  // Get subcategories based on main category and gender
+  const getSubcategories = () => {
+    if (selectedMainCategory === 'odeca') {
+      if (selectedGender === 'zene') {
+        return [
+          { value: 'sve', label: 'Sva odeća' },
+          { value: 'majice', label: 'Majice' },
+          { value: 'kosulje', label: 'Košulje' },
+          { value: 'duksevi', label: 'Duksevi' },
+          { value: 'dzemperi', label: 'Džemperi' },
+          { value: 'jakne', label: 'Jakne i prsluci' },
+          { value: 'pantalone', label: 'Pantalone' },
+          { value: 'farmerke', label: 'Farmerke' },
+          { value: 'suknje', label: 'Suknje' },
+          { value: 'haljine', label: 'Haljine' },
+          { value: 'sortsevi', label: 'Šortsevi i bermude' },
+          { value: 'helanke', label: 'Helanke' },
+          { value: 'trenerke', label: 'Trenerke' },
+          { value: 'kombinezoni', label: 'Kombinezoni' }
+        ];
+      } else if (selectedGender === 'muskarci') {
+        return [
+          { value: 'sve', label: 'Sva odeća' },
+          { value: 'majice', label: 'Majice' },
+          { value: 'kosulje', label: 'Košulje' },
+          { value: 'duksevi', label: 'Duksevi' },
+          { value: 'dzemperi', label: 'Džemperi' },
+          { value: 'jakne', label: 'Jakne i prsluci' },
+          { value: 'pantalone', label: 'Pantalone' },
+          { value: 'farmerke', label: 'Farmerke' },
+          { value: 'odela', label: 'Odela i sakoi' },
+          { value: 'sortsevi', label: 'Šortsevi i bermude' },
+          { value: 'trenerke', label: 'Trenerke' }
+        ];
+      }
+      // Mixed gender clothing
       return [
-        { value: 'sve', label: 'Sve kategorije' },
+        { value: 'sve', label: 'Sva odeća' },
         { value: 'majice', label: 'Majice' },
         { value: 'kosulje', label: 'Košulje' },
         { value: 'duksevi', label: 'Duksevi' },
         { value: 'dzemperi', label: 'Džemperi' },
         { value: 'jakne', label: 'Jakne i prsluci' },
-        { value: 'pantalone-farmerke', label: 'Pantalone i farmerke' },
-        { value: 'suknje', label: 'Suknje' },
-        { value: 'haljine', label: 'Haljine' },
-        { value: 'obuca', label: 'Obuća' },
-        { value: 'aksesoari', label: 'Aksesoari' }
+        { value: 'pantalone', label: 'Pantalone' },
+        { value: 'farmerke', label: 'Farmerke' }
       ];
-    } else if (selectedGender === 'muskarci') {
+    } else if (selectedMainCategory === 'obuca') {
+      if (selectedGender === 'zene') {
+        return [
+          { value: 'sve', label: 'Sva obuća' },
+          { value: 'patike', label: 'Patike' },
+          { value: 'cipele-stikla', label: 'Cipele na štiklu' },
+          { value: 'ravne-cipele', label: 'Ravne cipele' },
+          { value: 'cizme', label: 'Čizme' },
+          { value: 'sandale', label: 'Sandale' }
+        ];
+      } else if (selectedGender === 'muskarci') {
+        return [
+          { value: 'sve', label: 'Sva obuća' },
+          { value: 'patike', label: 'Patike' },
+          { value: 'cipele', label: 'Cipele' },
+          { value: 'cizme', label: 'Čizme' },
+          { value: 'sandale', label: 'Sandale' }
+        ];
+      }
       return [
-        { value: 'sve', label: 'Sve kategorije' },
-        { value: 'majice', label: 'Majice' },
-        { value: 'kosulje', label: 'Košulje' },
-        { value: 'duksevi', label: 'Duksevi' },
-        { value: 'dzemperi', label: 'Džemperi' },
-        { value: 'jakne', label: 'Jakne i prsluci' },
-        { value: 'pantalone-farmerke', label: 'Pantalone i farmerke' },
-        { value: 'odela', label: 'Odela i sakoi' },
-        { value: 'obuca', label: 'Obuća' },
-        { value: 'aksesoari', label: 'Aksesoari' }
+        { value: 'sve', label: 'Sva obuća' },
+        { value: 'patike', label: 'Patike' },
+        { value: 'cipele', label: 'Cipele' },
+        { value: 'cizme', label: 'Čizme' },
+        { value: 'sandale', label: 'Sandale' }
+      ];
+    } else if (selectedMainCategory === 'aksesoari') {
+      return [
+        { value: 'sve', label: 'Svi aksesoari' },
+        { value: 'torbe', label: 'Torbe i rančevi' },
+        { value: 'kaisevi', label: 'Kaisevi' },
+        { value: 'novcanci', label: 'Novčanici' },
+        { value: 'satovi', label: 'Satovi' },
+        { value: 'nakit', label: 'Nakit' },
+        { value: 'naocare', label: 'Naočare' },
+        { value: 'kape', label: 'Kape i šeširi' }
       ];
     }
-    // Default - all categories
-    return [
-      { value: 'sve', label: 'Sve kategorije' },
-      { value: 'majice', label: 'Majice' },
-      { value: 'kosulje', label: 'Košulje' },
-      { value: 'duksevi', label: 'Duksevi' },
-      { value: 'dzemperi', label: 'Džemperi' },
-      { value: 'jakne', label: 'Jakne i prsluci' },
-      { value: 'pantalone-farmerke', label: 'Pantalone i farmerke' },
-      { value: 'haljine', label: 'Haljine' },
-      { value: 'obuca', label: 'Obuća' },
-      { value: 'aksesoari', label: 'Aksesoari' }
-    ];
+    return [];
   };
 
   const priceRanges = [
@@ -153,19 +204,38 @@ export default function SearchPage() {
         {/* Filters */}
         {showFilters && (
           <div className="bg-white rounded-2xl shadow-card p-4 mb-6 space-y-4">
-            {/* Category Filter */}
+            {/* Main Category Filter */}
             <div>
               <label className="block text-sm font-medium mb-2">Kategorija</label>
               <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                value={selectedMainCategory}
+                onChange={(e) => {
+                  setSelectedMainCategory(e.target.value);
+                  setSelectedSubCategory('sve'); // Reset subcategory when main changes
+                }}
                 className="w-full px-3 py-2 border border-black/10 rounded-lg focus:outline-none focus:border-purple"
               >
-                {getCategories().map(cat => (
+                {mainCategories.map(cat => (
                   <option key={cat.value} value={cat.value}>{cat.label}</option>
                 ))}
               </select>
             </div>
+
+            {/* Subcategory Filter - Only shows if a main category is selected */}
+            {selectedMainCategory !== 'sve' && (
+              <div>
+                <label className="block text-sm font-medium mb-2">Tip</label>
+                <select
+                  value={selectedSubCategory}
+                  onChange={(e) => setSelectedSubCategory(e.target.value)}
+                  className="w-full px-3 py-2 border border-black/10 rounded-lg focus:outline-none focus:border-purple"
+                >
+                  {getSubcategories().map(cat => (
+                    <option key={cat.value} value={cat.value}>{cat.label}</option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             {/* Size Filter */}
             <div>

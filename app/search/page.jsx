@@ -129,16 +129,6 @@ export default function SearchPage() {
       ];
     }
     return [];
-  };
-
-  const priceRanges = [
-    { value: 'sve', label: 'Svi cenovni rangovi' },
-    { value: '0-1000', label: 'Do 1.000 RSD' },
-    { value: '1000-3000', label: '1.000 - 3.000 RSD' },
-    { value: '3000-5000', label: '3.000 - 5.000 RSD' },
-    { value: '5000-10000', label: '5.000 - 10.000 RSD' },
-    { value: '10000+', label: 'Preko 10.000 RSD' },
-  ];
 
   return (
     <>

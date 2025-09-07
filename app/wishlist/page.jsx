@@ -2,20 +2,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import HeaderMobile from '@/components/HeaderMobile';
 import BottomNav from '@/components/BottomNav';
-import useAuthUser from '@/hooks/useAuth';
 import { IconHeart } from '@/components/icons/Icons';
 
 function WishlistItemCard({ item, onRemove }) {
   return (
     <div className="card p-4 relative">
-      {/* Square image placeholder */}
       <div className="aspect-square bg-[#eee] rounded-lg mb-3" />
       
-      {/* Remove from wishlist button */}
       <button 
         onClick={() => onRemove(item.id)}
         className="absolute top-3 right-3 p-2 rounded-full bg-white shadow-md hover:bg-red-50 transition-colors"
@@ -31,49 +27,15 @@ function WishlistItemCard({ item, onRemove }) {
 }
 
 export default function WishlistPage() {
-  const router = useRouter();
-const user = useAuthUser();
-const [loading, setLoading] = useState(true);
-
-useEffect(() => {
-  // Simple loading check
-  setLoading(false);
-}, []);
-  const [wishlistItems, setWishlistItems] = useState([]);
-
-  useEffect(() => {
-    // Redirect to login if not authenticated
-    if (!loading && !user) {
-      router.push('/login');
-    }
-  }, [user, loading, router]);
-
-  // Temporary mock data - later we'll fetch from Supabase
-  useEffect(() => {
-    if (user) {
-      setWishlistItems([
-        { id: 1, name: 'Vintage Levis 501', price: '4.500', seller: '@marko_style' },
-        { id: 2, name: 'Nike Air Max 90', price: '8.000', seller: '@sneaker_shop' },
-        { id: 3, name: 'Zara jakna', price: '3.200', seller: '@fashion_girl' },
-      ]);
-    }
-  }, [user]);
+  const [wishlistItems, setWishlistItems] = useState([
+    { id: 1, name: 'Vintage Levis 501', price: '4.500', seller: '@marko_style' },
+    { id: 2, name: 'Nike Air Max 90', price: '8.000', seller: '@sneaker_shop' },
+    { id: 3, name: 'Zara jakna', price: '3.200', seller: '@fashion_girl' },
+  ]);
 
   const removeFromWishlist = (itemId) => {
     setWishlistItems(items => items.filter(item => item.id !== itemId));
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#F8F8F8] flex items-center justify-center">
-        <div className="text-ink2">Učitavanje...</div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return null; // Will redirect to login
-  }
 
   return (
     <>

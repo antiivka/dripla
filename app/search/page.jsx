@@ -1,0 +1,235 @@
+// app/search/page.jsx
+'use client';
+
+import { useState } from 'react';
+import HeaderMobile from '@/components/HeaderMobile';
+import BottomNav from '@/components/BottomNav';
+import { IconSearch } from '@/components/icons/Icons';
+
+function SearchResultCard({ item }) {
+  return (
+    <div className="card p-4">
+      <div className="aspect-square bg-[#eee] rounded-lg mb-3" />
+      <div className="text-sm font-medium">{item.name}</div>
+      <div className="text-sm text-ink2">{item.price} RSD</div>
+      <div className="text-xs text-ink2 mt-1">{item.condition} · {item.size}</div>
+    </div>
+  );
+}
+
+export default function SearchPage() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedGender, setSelectedGender] = useState('sve');
+  const [selectedCategory, setSelectedCategory] = useState('sve');
+  const [selectedSize, setSelectedSize] = useState('');
+  const [priceRange, setPriceRange] = useState('sve');
+  const [showFilters, setShowFilters] = useState(false);
+
+  // Mock search results
+  const mockResults = [
+    { id: 1, name: 'Adidas majica', price: '1.500', condition: 'Kao novo', size: 'M' },
+    { id: 2, name: 'Levis 501 farmerke', price: '4.000', condition: 'Odlično', size: '32' },
+    { id: 3, name: 'Nike patike', price: '6.500', condition: 'Novo', size: '42' },
+    { id: 4, name: 'Zara jakna', price: '3.200', condition: 'Dobro', size: 'L' },
+    { id: 5, name: 'H&M haljina', price: '2.000', condition: 'Kao novo', size: 'S' },
+    { id: 6, name: 'Converse All Star', price: '5.000', condition: 'Odlično', size: '41' },
+  ];
+
+  // Categories based on selected gender
+  const getCategories = () => {
+    if (selectedGender === 'zene') {
+      return [
+        { value: 'sve', label: 'Sve kategorije' },
+        { value: 'majice', label: 'Majice' },
+        { value: 'kosulje', label: 'Košulje' },
+        { value: 'duksevi', label: 'Duksevi' },
+        { value: 'dzemperi', label: 'Džemperi' },
+        { value: 'jakne', label: 'Jakne i prsluci' },
+        { value: 'pantalone-farmerke', label: 'Pantalone i farmerke' },
+        { value: 'suknje', label: 'Suknje' },
+        { value: 'haljine', label: 'Haljine' },
+        { value: 'obuca', label: 'Obuća' },
+        { value: 'aksesoari', label: 'Aksesoari' }
+      ];
+    } else if (selectedGender === 'muskarci') {
+      return [
+        { value: 'sve', label: 'Sve kategorije' },
+        { value: 'majice', label: 'Majice' },
+        { value: 'kosulje', label: 'Košulje' },
+        { value: 'duksevi', label: 'Duksevi' },
+        { value: 'dzemperi', label: 'Džemperi' },
+        { value: 'jakne', label: 'Jakne i prsluci' },
+        { value: 'pantalone-farmerke', label: 'Pantalone i farmerke' },
+        { value: 'odela', label: 'Odela i sakoi' },
+        { value: 'obuca', label: 'Obuća' },
+        { value: 'aksesoari', label: 'Aksesoari' }
+      ];
+    }
+    // Default - all categories
+    return [
+      { value: 'sve', label: 'Sve kategorije' },
+      { value: 'majice', label: 'Majice' },
+      { value: 'kosulje', label: 'Košulje' },
+      { value: 'duksevi', label: 'Duksevi' },
+      { value: 'dzemperi', label: 'Džemperi' },
+      { value: 'jakne', label: 'Jakne i prsluci' },
+      { value: 'pantalone-farmerke', label: 'Pantalone i farmerke' },
+      { value: 'haljine', label: 'Haljine' },
+      { value: 'obuca', label: 'Obuća' },
+      { value: 'aksesoari', label: 'Aksesoari' }
+    ];
+  };
+
+  const priceRanges = [
+    { value: 'sve', label: 'Svi cenovni rangovi' },
+    { value: '0-1000', label: 'Do 1.000 RSD' },
+    { value: '1000-3000', label: '1.000 - 3.000 RSD' },
+    { value: '3000-5000', label: '3.000 - 5.000 RSD' },
+    { value: '5000-10000', label: '5.000 - 10.000 RSD' },
+    { value: '10000+', label: 'Preko 10.000 RSD' },
+  ];
+
+  return (
+    <>
+      <HeaderMobile />
+      
+      <main className="mx-auto max-w-5xl px-4 pt-4 pb-24">
+        {/* Gender Tabs */}
+        <div className="flex gap-2 mb-4">
+          <button
+            onClick={() => setSelectedGender('sve')}
+            className={`flex-1 py-2 px-4 rounded-lg font-medium transition ${
+              selectedGender === 'sve'
+                ? 'bg-gradient-to-r from-purple to-orange text-white'
+                : 'bg-white border border-black/10 hover:bg-black/5'
+            }`}
+          >
+            Sve
+          </button>
+          <button
+            onClick={() => setSelectedGender('zene')}
+            className={`flex-1 py-2 px-4 rounded-lg font-medium transition ${
+              selectedGender === 'zene'
+                ? 'bg-gradient-to-r from-purple to-orange text-white'
+                : 'bg-white border border-black/10 hover:bg-black/5'
+            }`}
+          >
+            Žene
+          </button>
+          <button
+            onClick={() => setSelectedGender('muskarci')}
+            className={`flex-1 py-2 px-4 rounded-lg font-medium transition ${
+              selectedGender === 'muskarci'
+                ? 'bg-gradient-to-r from-purple to-orange text-white'
+                : 'bg-white border border-black/10 hover:bg-black/5'
+            }`}
+          >
+            Muškarci
+          </button>
+        </div>
+
+        {/* Search Bar */}
+        <div className="mb-4">
+          <div className="relative">
+            <IconSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-ink2" size={20} />
+            <input
+              type="text"
+              placeholder="Pretraži artikle..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 border border-black/10 rounded-xl focus:outline-none focus:border-purple"
+            />
+          </div>
+        </div>
+
+        {/* Filter Toggle */}
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className="mb-4 px-4 py-2 border border-black/10 rounded-pill text-sm hover:bg-black/5 transition"
+        >
+          {showFilters ? 'Sakrij filtere' : 'Prikaži filtere'} 
+        </button>
+
+        {/* Filters */}
+        {showFilters && (
+          <div className="bg-white rounded-2xl shadow-card p-4 mb-6 space-y-4">
+            {/* Category Filter */}
+            <div>
+              <label className="block text-sm font-medium mb-2">Kategorija</label>
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full px-3 py-2 border border-black/10 rounded-lg focus:outline-none focus:border-purple"
+              >
+                {getCategories().map(cat => (
+                  <option key={cat.value} value={cat.value}>{cat.label}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Size Filter */}
+            <div>
+              <label className="block text-sm font-medium mb-2">Veličina</label>
+              <div className="flex flex-wrap gap-2">
+                {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map(size => (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(selectedSize === size ? '' : size)}
+                    className={`px-3 py-1 border rounded-lg text-sm transition ${
+                      selectedSize === size 
+                        ? 'border-purple bg-purple/10 text-purple' 
+                        : 'border-black/10 hover:bg-black/5'
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Price Range Filter */}
+            <div>
+              <label className="block text-sm font-medium mb-2">Cena</label>
+              <select
+                value={priceRange}
+                onChange={(e) => setPriceRange(e.target.value)}
+                className="w-full px-3 py-2 border border-black/10 rounded-lg focus:outline-none focus:border-purple"
+              >
+                {priceRanges.map(range => (
+                  <option key={range.value} value={range.value}>{range.label}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Clear Filters */}
+            <button
+              onClick={() => {
+                setSelectedCategory('sve');
+                setSelectedSize('');
+                setPriceRange('sve');
+                setSelectedGender('sve');
+              }}
+              className="text-sm text-purple hover:underline"
+            >
+              Obriši sve filtere
+            </button>
+          </div>
+        )}
+
+        {/* Results Count */}
+        <p className="text-sm text-ink2 mb-4">
+          Pronađeno {mockResults.length} artikala
+        </p>
+
+        {/* Search Results Grid */}
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+          {mockResults.map(item => (
+            <SearchResultCard key={item.id} item={item} />
+          ))}
+        </div>
+      </main>
+
+      <BottomNav />
+    </>
+  );
+}

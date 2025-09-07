@@ -44,11 +44,15 @@ export default function WishlistPage() {
       <main className="mx-auto max-w-5xl px-4 pt-4 pb-24">
         <div className="mb-6">
           <h1 className="text-2xl font-semibold mb-2">Moja lista želja</h1>
-          <p className="text-ink2 text-sm">
-            {wishlistItems.length > 0 
-              ? `Imaš ${wishlistItems.length} sačuvanih artikala`
-              : 'Nemaš sačuvane artikle'}
-          </p>
+        <p className="text-ink2 text-sm">
+  {wishlistItems.length === 0 
+    ? 'Nemaš sačuvane artikle'
+    : wishlistItems.length === 1
+    ? 'Imaš 1 sačuvan artikal'
+    : wishlistItems.length < 5
+    ? `Imaš ${wishlistItems.length} sačuvana artikla`
+    : `Imaš ${wishlistItems.length} sačuvanih artikala`}
+</p>
         </div>
 
         {wishlistItems.length === 0 ? (

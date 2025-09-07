@@ -68,12 +68,12 @@ export default function LoginPage() {
           <Link href="/">
             <img src="/logo.png" alt="Dripla" className="h-12 mx-auto mb-4" />
           </Link>
-          <h1 className="text-2xl font-bold text-ink">
-            {isLogin ? 'Prijavi se' : 'Napravi nalog'}
-          </h1>
-          <p className="text-ink2 mt-2">
-            {isLogin ? 'Dobrodošao nazad!' : 'Pridruži se Dripla zajednici'}
-          </p>
+         <h1 className="text-2xl font-bold text-ink">
+  {isLogin ? 'Dobrodošao nazad!' : 'Pridruži se Dripli'}
+</h1>
+<p className="text-ink2 mt-2">
+  {isLogin ? 'Uloguj se na svoj Dripla nalog' : 'Napravi nalog i počni prodaju'}
+</p>
         </div>
 
         {/* Form */}

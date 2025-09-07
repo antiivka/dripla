@@ -204,7 +204,8 @@ export default function SearchPage() {
             {/* Clear Filters */}
             <button
               onClick={() => {
-                setSelectedCategory('sve');
+                setSelectedMainCategory('sve');
+                setSelectedSubCategory('sve');
                 setSelectedSize('');
                 setPriceRange('sve');
                 setSelectedGender('sve');

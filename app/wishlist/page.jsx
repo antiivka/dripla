@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import HeaderMobile from '@/components/HeaderMobile';
 import BottomNav from '@/components/BottomNav';
-import { useAuth } from '@/hooks/useAuth';
+import useAuthUser from '@/hooks/useAuth';
 import { IconHeart } from '@/components/icons/Icons';
 
 function WishlistItemCard({ item, onRemove }) {
@@ -32,7 +32,13 @@ function WishlistItemCard({ item, onRemove }) {
 
 export default function WishlistPage() {
   const router = useRouter();
-  const { user, loading } = useAuth();
+const user = useAuthUser();
+const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+  // Simple loading check
+  setLoading(false);
+}, []);
   const [wishlistItems, setWishlistItems] = useState([]);
 
   useEffect(() => {

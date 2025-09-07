@@ -129,6 +129,7 @@ export default function SearchPage() {
       ];
     }
     return [];
+  };
 
   return (
     <>

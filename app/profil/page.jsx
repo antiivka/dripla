@@ -21,9 +21,9 @@ export default function ProfilePage() {
         const { data: { session } } = await supabase.auth.getSession();
         if (session) {
           setUser(session.user);
-        } else {
-          router.push('/login');
-        }
+       } else {
+  router.replace('/login');
+}
       } catch (error) {
         console.error('Error checking session:', error);
       } finally {

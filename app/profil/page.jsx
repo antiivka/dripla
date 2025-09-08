@@ -3,47 +3,67 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabaseClient';
 import HeaderMobile from '@/components/HeaderMobile';
 import BottomNav from '@/components/BottomNav';
 import FABs from '@/components/FABs';
 import Link from 'next/link';
-import { useAuth } from '@/hooks/useAuth';
 
 export default function ProfilePage() {
   const router = useRouter();
-  const user = useAuth();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [userListings, setUserListings] = useState([]);
 
-  // Redirect to login if not authenticated
   useEffect(() => {
-    if (!user) {
-      router.push('/login');
-    }
-  }, [user, router]);
+    const checkUser = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          setUser(session.user);
+        } else {
+          router.push('/login');
+        }
+      } catch (error) {
+        console.error('Error checking session:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    checkUser();
+  }, [router]);
 
   // Mock user data - replace with real data from Supabase
   const profileData = {
-    name: 'Marija Petrović',
-    username: '@marija_p',
+    name: user?.email?.split('@')[0] || 'Korisnik',
+    username: `@${user?.email?.split('@')[0] || 'korisnik'}`,
     location: 'Beograd',
     bio: 'Ljubitelj vintage komada i streetwear-a. Uvek tražim jedinstvene delove.',
-    listingsCount: 127,
-    followersCount: 3,
-    avatar: null // Will show placeholder
+    listingsCount: 0,
+    reviewsCount: 0
   };
 
   // Mock listings data
   const mockListings = [
     { id: 1, title: 'Nike Air Force 1', price: 8000, image: null, status: 'active' },
     { id: 2, title: 'Zara haljina', price: 3500, image: null, status: 'sold' },
-    { id: 3, title: 'H&M džemper', price: 2000, image: null, status: 'active' },
-    { id: 4, title: 'Vintage Levi\'s jakna', price: 5500, image: null, status: 'active' }
   ];
 
   useEffect(() => {
-    // In production, fetch user's listings from Supabase
-    setUserListings(mockListings);
-  }, []);
+    if (user) {
+      // In production, fetch user's listings from Supabase
+      setUserListings(mockListings);
+    }
+  }, [user]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Učitavanje...</p>
+      </div>
+    );
+  }
 
   if (!user) {
     return null;
@@ -54,19 +74,15 @@ export default function ProfilePage() {
       <HeaderMobile />
       
       <main className="pb-20 pt-14">
-        {/* Profile Header - Cleaner Design */}
+        {/* Profile Header */}
         <div className="bg-white border-b">
           <div className="max-w-2xl mx-auto px-4 py-6">
             <div className="flex items-start gap-4">
               {/* Avatar */}
               <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0">
-                {profileData.avatar ? (
-                  <img src={profileData.avatar} alt={profileData.name} className="w-full h-full rounded-full object-cover" />
-                ) : (
-                  <span className="text-2xl text-gray-400">
-                    {profileData.name.split(' ').map(n => n[0]).join('')}
-                  </span>
-                )}
+                <span className="text-2xl text-gray-400">
+                  {profileData.name[0].toUpperCase()}
+                </span>
               </div>
 
               {/* Profile Info */}
@@ -76,12 +92,12 @@ export default function ProfilePage() {
                 
                 {/* Stats */}
                 <div className="flex items-center gap-4 mt-2">
-                  <div className="flex items-center gap-1">
-                    <span className="text-green-600 font-semibold">👍 {profileData.listingsCount}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="text-red-500 font-semibold">👎 {profileData.followersCount}</span>
-                  </div>
+                  <span className="text-sm">
+                    <span className="font-semibold">{profileData.listingsCount}</span> oglasa
+                  </span>
+                  <span className="text-sm">
+                    <span className="font-semibold">{profileData.reviewsCount}</span> recenzija
+                  </span>
                   <span className="text-gray-500 text-sm">{profileData.location}</span>
                 </div>
 
@@ -118,15 +134,18 @@ export default function ProfilePage() {
                 <span className="text-xs font-medium">Podešavanja</span>
               </Link>
 
-              <Link 
-                href="/wishlist"
-                className="flex flex-col items-center justify-center py-3 bg-pink-50 rounded-xl hover:bg-pink-100 transition-colors"
+              <button
+                onClick={async () => {
+                  await supabase.auth.signOut();
+                  router.push('/login');
+                }}
+                className="flex flex-col items-center justify-center py-3 bg-red-50 rounded-xl hover:bg-red-100 transition-colors"
               >
-                <svg className="w-6 h-6 mb-1 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                <svg className="w-6 h-6 mb-1 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                 </svg>
-                <span className="text-xs font-medium">Lista želja</span>
-              </Link>
+                <span className="text-xs font-medium">Odjavi se</span>
+              </button>
             </div>
           </div>
         </div>
@@ -139,40 +158,13 @@ export default function ProfilePage() {
             <div className="grid grid-cols-2 gap-3">
               {userListings.map((listing) => (
                 <div key={listing.id} className="bg-white rounded-lg overflow-hidden shadow-sm">
-                  {/* Image */}
                   <div className="aspect-square bg-gray-100 relative">
-                    {listing.image ? (
-                      <img src={listing.image} alt={listing.title} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-400">
-                        <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                      </div>
-                    )}
-                    
-                    {/* Action buttons */}
-                    <div className="absolute top-2 right-2 flex gap-1">
-                      <button className="p-1.5 bg-white rounded-full shadow-md hover:bg-gray-100">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                        </svg>
-                      </button>
-                      <button className="p-1.5 bg-white rounded-full shadow-md hover:bg-gray-100">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                      {listing.status === 'active' && (
-                        <button className="p-1.5 bg-white rounded-full shadow-md hover:bg-gray-100">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                          </svg>
-                        </button>
-                      )}
+                    <div className="w-full h-full flex items-center justify-center text-gray-400">
+                      <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
                     </div>
-
-                    {/* Sold badge */}
+                    
                     {listing.status === 'sold' && (
                       <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                         <span className="bg-white px-3 py-1 rounded-full text-sm font-bold">PRODATO</span>
@@ -180,7 +172,6 @@ export default function ProfilePage() {
                     )}
                   </div>
 
-                  {/* Info */}
                   <div className="p-3">
                     <h3 className="font-medium text-sm truncate">{listing.title}</h3>
                     <p className="text-orange-500 font-bold text-sm mt-1">{listing.price.toLocaleString()} RSD</p>
@@ -189,7 +180,7 @@ export default function ProfilePage() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-12">
+            <div className="text-center py-12 bg-white rounded-lg">
               <p className="text-gray-500 mb-4">Još uvek nemaš oglase</p>
               <Link href="/sell" className="text-purple-600 font-medium">
                 Dodaj svoj prvi oglas

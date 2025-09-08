@@ -1,6 +1,5 @@
 // components/SearchSheet.jsx
 'use client';
-
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -18,13 +17,13 @@ export default function SearchSheet({ open, onClose }) {
   };
 
   const quickCategories = [
-    { value: 'odeca', label: 'Odeća' },
-    { value: 'obuca', label: 'Obuća' },
+    { value: 'odeća', label: 'Odeća' },
+    { value: 'obuća', label: 'Obuća' },
     { value: 'aksesoari', label: 'Aksesoari' }
   ];
 
   const handleCategoryClick = (category) => {
-    router.push(`/search?category=${category}`);
+    router.push(`/search?category=${encodeURIComponent(category)}`);
     onClose();
   };
 

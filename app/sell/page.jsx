@@ -14,38 +14,97 @@ export default function SellPage() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    gender: '',
+    mainCategory: '',
     category: '',
     subcategory: '',
-    gender: '',
+    detailedSubcategory: '',
     size: '',
     condition: '',
     brand: '',
     price: '',
-    location: 'Beograd'
+    location: 'Beograd',
+    color: [],
+    material: []
   });
 
   const [images, setImages] = useState([]);
   const [errors, setErrors] = useState({});
 
-  // Categories structure
-  const categories = {
-    'Odeća': {
-      subcategories: ['Majice', 'Košulje', 'Dukserice', 'Džemperi', 'Jakne', 'Pantalone', 'Farmerke', 'Šorcevi', 'Haljine', 'Suknje', 'Odela', 'Veš', 'Kupaći', 'Sportska odeća'],
-      sizes: {
-        clothing: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
-        kids: ['86', '92', '98', '104', '110', '116', '122', '128', '134', '140', '146', '152']
+  // Detailed categories for SELLING
+  const categoriesStructure = {
+    'Žene': {
+      'Odeća': {
+        'Majice': ['Majice kratkih rukava', 'Majice dugih rukava', 'Majice na bretele', 'Tube top majice', 'Tunike', 'Bluze'],
+        'Džemperi': ['Rolke', 'Kardigani', 'Ponco', 'Ostali džemperi'],
+        'Prsluci': [],
+        'Jakne': ['Kaputi', 'Mantili', 'Bunde', 'Ostale jakne'],
+        'Pantalone': ['Pantalone', 'Šorcevi', 'Trenerke'],
+        'Farmerke': [],
+        'Suknje': ['Mini', 'Midi', 'Maksi', 'Denim'],
+        'Haljine': ['Mini', 'Midi', 'Maksi', 'Svečane'],
+        'Kombinezoni': [],
+        'Setovi': [],
+        'Odela i sakoi': ['Sakoi', 'Odela'],
+        'Donji veš i pidžame': ['Gaćice', 'Grudnjaci', 'Shapewear', 'Bodiji', 'Setovi', 'Čarape', 'Najlonke i hulahopke', 'Bademantili', 'Pidžame'],
+        'Kupaći': [],
+        'Kostimi i uniforme': []
+      },
+      'Obuća': {
+        'Patike': ['Patike za trčanje', 'Patike za šetnju', 'Patike za planinarenje', 'Cipele patike', 'Sportske patike'],
+        'Cipele': ['Cipele na štiklu', 'Ravne cipele', 'Oksfordice', 'Mokasine', 'Espadrile'],
+        'Čizme': ['Iznad kolena', 'Do kolena', 'Chelsea čizme', 'Gležnjače', 'Kaubojke', 'Ravne čizme', 'Čizme sa štiklom'],
+        'Sandale': ['Ravne sandale', 'Sandale sa štiklom'],
+        'Baletanke': [],
+        'Papuče i japanke': ['Papuče', 'Japanke', 'Klompe']
+      },
+      'Aksesoari': {
+        'Torbe i rančevi': ['Torbice i pismo torbe', 'Torbe za rame', 'Poštar torbe', 'Tašne', 'Velike torbe', 'Rančevi', 'Torbe za plažu', 'Cegeri', 'Torbice oko struka', 'Torbe za laptop', 'Sportske torbe', 'Vikend torbe', 'Koferi', 'Neseseri'],
+        'Kaiš': [],
+        'Novčanici': [],
+        'Satovi': [],
+        'Nakit': ['Prstenje', 'Narukvice', 'Ogrlice', 'Privešci', 'Minđuše'],
+        'Naočare': ['Naočare za sunce', 'Naočare za vid'],
+        'Kape i šeširi': ['Kačketi', 'Šeširi', 'Kape'],
+        'Šalovi': [],
+        'Rukavice': [],
+        'Ostalo': ['Kisobrani', 'Privešci za ključeve', 'Maske za telefon']
       }
     },
-    'Obuća': {
-      subcategories: ['Patike', 'Cipele', 'Čizme', 'Sandale', 'Papuče'],
-      sizes: {
-        shoes: ['35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46']
-      }
-    },
-    'Aksesoari': {
-      subcategories: ['Torbe', 'Novčanici', 'Kaiš', 'Nakit', 'Satovi', 'Naočare', 'Šeširi i kape', 'Šalovi i marame'],
-      sizes: {
-        default: ['Jedinstvena veličina']
+    'Muškarci': {
+      'Odeća': {
+        'Majice': ['Majice kratkih rukava', 'Majice dugih rukava', 'Majice bez rukava'],
+        'Košulje': [],
+        'Džemperi': ['Rolke', 'Kardigani', 'Džemperi'],
+        'Prsluci': [],
+        'Jakne': ['Kaputi', 'Mantili', 'Jakne'],
+        'Pantalone': ['Farmerke', 'Pantalone', 'Šorcevi', 'Bermude', 'Trenerke'],
+        'Odela i sakoi': ['Odela', 'Sakoi'],
+        'Donji veš': ['Bokserice', 'Duge gaće', 'Čarape'],
+        'Pidžame': [],
+        'Bademantili': [],
+        'Kupaći': [],
+        'Kostimi i uniforme': []
+      },
+      'Obuća': {
+        'Patike': ['Patike za trčanje', 'Patike za šetnju', 'Patike za planinarenje', 'Cipele patike', 'Sportske patike'],
+        'Cipele': ['Oksfordice', 'Mokasine', 'Espadrile', 'Kanadjanke', 'Radne cipele'],
+        'Čizme': ['Chelsea čizme', 'Kaubojke', 'Ostale čizme'],
+        'Sandale': [],
+        'Papuče i japanke': ['Papuče', 'Japanke']
+      },
+      'Aksesoari': {
+        'Torbe i rančevi': ['Torbe za rame', 'Poštar torbe', 'Velike torbe', 'Rančevi', 'Torbe za laptop', 'Sportske torbe', 'Vikend torbe', 'Koferi'],
+        'Kaiš': [],
+        'Novčanici': [],
+        'Satovi': [],
+        'Nakit': ['Prstenje', 'Narukvice', 'Ogrlice', 'Privešci'],
+        'Naočare': ['Naočare za sunce', 'Naočare za vid'],
+        'Kape i šeširi': ['Kačketi', 'Šeširi', 'Kape'],
+        'Kravate': [],
+        'Šalovi': [],
+        'Rukavice': [],
+        'Ostalo': ['Kisobrani', 'Privešci za ključeve']
       }
     }
   };
@@ -54,9 +113,22 @@ export default function SellPage() {
     { value: 'novo', label: 'Novo sa etiketom' },
     { value: 'kao-novo', label: 'Kao novo' },
     { value: 'odlicno', label: 'Odlično' },
+    { value: 'vrlo-dobro', label: 'Vrlo dobro' },
     { value: 'dobro', label: 'Dobro' },
-    { value: 'zadovoljavajuce', label: 'Zadovoljavajuće' }
+    { value: 'osteceno', label: 'Oštećeno' },
+    { value: 'reparirano', label: 'Reparirano' }
   ];
+
+  const colors = ['Crna', 'Bela', 'Smeđa', 'Srebrna', 'Zlatna', 'Žuta', 'Zelena', 'Plava', 'Ljubičasta', 'Roze', 'Crvena', 'Šarena'];
+  
+  const materials = ['Pamuk', 'Poliester', 'Vuna', 'Svila', 'Lan', 'Kašmir', 'Viskoza', 'Koža', 'Eko koža', 'Krzno', 'Denim', 'Neopren', 'Gore-Tex', 'Ostalo'];
+
+  const sizes = {
+    clothing: ['XXXS', 'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
+    clothingEU: ['32', '34', '36', '38', '40', '42', '44', '46', '48'],
+    shoes: ['35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46'],
+    kids: ['86', '92', '98', '104', '110', '116', '122', '128', '134', '140', '146', '152']
+  };
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
@@ -73,9 +145,9 @@ export default function SellPage() {
     
     if (!formData.title) newErrors.title = 'Naslov je obavezan';
     if (!formData.description) newErrors.description = 'Opis je obavezan';
-    if (!formData.category) newErrors.category = 'Kategorija je obavezna';
-    if (!formData.subcategory) newErrors.subcategory = 'Potkategorija je obavezna';
     if (!formData.gender) newErrors.gender = 'Pol je obavezan';
+    if (!formData.mainCategory) newErrors.mainCategory = 'Glavna kategorija je obavezna';
+    if (!formData.category) newErrors.category = 'Kategorija je obavezna';
     if (!formData.size) newErrors.size = 'Veličina je obavezna';
     if (!formData.condition) newErrors.condition = 'Stanje je obavezno';
     if (!formData.price) newErrors.price = 'Cena je obavezna';
@@ -96,17 +168,10 @@ export default function SellPage() {
   };
 
   const getSizes = () => {
-    if (!formData.category) return [];
-    
-    if (formData.category === 'Odeća') {
-      return formData.gender === 'Deca' 
-        ? categories['Odeća'].sizes.kids 
-        : categories['Odeća'].sizes.clothing;
-    } else if (formData.category === 'Obuća') {
-      return categories['Obuća'].sizes.shoes;
-    } else {
-      return categories['Aksesoari'].sizes.default;
+    if (formData.mainCategory === 'Obuća') {
+      return sizes.shoes;
     }
+    return sizes.clothing;
   };
 
   return (
@@ -194,55 +259,24 @@ export default function SellPage() {
               {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
             </div>
 
-            {/* Category */}
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                Kategorija <span className="text-red-500">*</span>
-              </label>
-              <select
-                value={formData.category}
-                onChange={(e) => setFormData({...formData, category: e.target.value, subcategory: '', size: ''})}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
-              >
-                <option value="">Izaberi kategoriju</option>
-                {Object.keys(categories).map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
-              {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category}</p>}
-            </div>
-
-            {/* Subcategory */}
-            {formData.category && (
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Potkategorija <span className="text-red-500">*</span>
-                </label>
-                <select
-                  value={formData.subcategory}
-                  onChange={(e) => setFormData({...formData, subcategory: e.target.value})}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
-                >
-                  <option value="">Izaberi potkategoriju</option>
-                  {categories[formData.category].subcategories.map(sub => (
-                    <option key={sub} value={sub}>{sub}</option>
-                  ))}
-                </select>
-                {errors.subcategory && <p className="text-red-500 text-sm mt-1">{errors.subcategory}</p>}
-              </div>
-            )}
-
             {/* Gender */}
             <div>
               <label className="block text-sm font-medium mb-2">
                 Za koga <span className="text-red-500">*</span>
               </label>
-              <div className="grid grid-cols-3 gap-2">
-                {['Žene', 'Muškarci', 'Deca'].map(gender => (
+              <div className="grid grid-cols-2 gap-2">
+                {['Žene', 'Muškarci'].map(gender => (
                   <button
                     key={gender}
                     type="button"
-                    onClick={() => setFormData({...formData, gender, size: ''})}
+                    onClick={() => setFormData({
+                      ...formData, 
+                      gender, 
+                      mainCategory: '', 
+                      category: '', 
+                      subcategory: '',
+                      detailedSubcategory: ''
+                    })}
                     className={`py-2 px-4 border rounded-lg transition-colors ${
                       formData.gender === gender
                         ? 'bg-purple-600 text-white border-purple-600'
@@ -256,8 +290,92 @@ export default function SellPage() {
               {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender}</p>}
             </div>
 
+            {/* Main Category (Odeća/Obuća/Aksesoari) */}
+            {formData.gender && (
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Glavna kategorija <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={formData.mainCategory}
+                  onChange={(e) => setFormData({
+                    ...formData, 
+                    mainCategory: e.target.value, 
+                    category: '', 
+                    subcategory: '',
+                    detailedSubcategory: ''
+                  })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
+                >
+                  <option value="">Izaberi glavnu kategoriju</option>
+                  {Object.keys(categoriesStructure[formData.gender]).map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+                {errors.mainCategory && <p className="text-red-500 text-sm mt-1">{errors.mainCategory}</p>}
+              </div>
+            )}
+
+            {/* Category */}
+            {formData.mainCategory && (
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Kategorija <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={formData.category}
+                  onChange={(e) => setFormData({
+                    ...formData, 
+                    category: e.target.value, 
+                    subcategory: '',
+                    detailedSubcategory: ''
+                  })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
+                >
+                  <option value="">Izaberi kategoriju</option>
+                  {Object.keys(categoriesStructure[formData.gender][formData.mainCategory]).map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+                {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category}</p>}
+              </div>
+            )}
+
+            {/* Detailed Subcategory */}
+            {formData.category && categoriesStructure[formData.gender][formData.mainCategory][formData.category].length > 0 && (
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Tip
+                </label>
+                <select
+                  value={formData.detailedSubcategory}
+                  onChange={(e) => setFormData({...formData, detailedSubcategory: e.target.value})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
+                >
+                  <option value="">Izaberi tip (opciono)</option>
+                  {categoriesStructure[formData.gender][formData.mainCategory][formData.category].map(sub => (
+                    <option key={sub} value={sub}>{sub}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {/* Brand */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Brend
+              </label>
+              <input
+                type="text"
+                value={formData.brand}
+                onChange={(e) => setFormData({...formData, brand: e.target.value})}
+                placeholder="npr. Zara, H&M, Nike..."
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
+              />
+            </div>
+
             {/* Size */}
-            {formData.category && formData.gender && (
+            {formData.mainCategory && (
               <div>
                 <label className="block text-sm font-medium mb-2">
                   Veličina <span className="text-red-500">*</span>
@@ -276,18 +394,31 @@ export default function SellPage() {
               </div>
             )}
 
-            {/* Brand */}
+            {/* Color - Multi-select */}
             <div>
               <label className="block text-sm font-medium mb-2">
-                Brend
+                Boja
               </label>
-              <input
-                type="text"
-                value={formData.brand}
-                onChange={(e) => setFormData({...formData, brand: e.target.value})}
-                placeholder="npr. Zara, H&M, Nike..."
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
-              />
+              <div className="grid grid-cols-4 gap-2">
+                {colors.map(color => (
+                  <label key={color} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      value={color}
+                      checked={formData.color.includes(color)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setFormData({...formData, color: [...formData.color, color]});
+                        } else {
+                          setFormData({...formData, color: formData.color.filter(c => c !== color)});
+                        }
+                      }}
+                      className="mr-2"
+                    />
+                    <span className="text-sm">{color}</span>
+                  </label>
+                ))}
+              </div>
             </div>
 
             {/* Condition */}

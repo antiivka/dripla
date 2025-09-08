@@ -165,6 +165,27 @@ export default function ProfilePage() {
                       </svg>
                     </div>
                     
+                    {/* Action buttons - ADDED THIS SECTION */}
+                    <div className="absolute top-2 right-2 flex gap-1">
+                      <button className="p-1.5 bg-white rounded-lg shadow-md hover:bg-gray-100">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        </svg>
+                      </button>
+                      <button className="p-1.5 bg-white rounded-lg shadow-md hover:bg-gray-100">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                      {listing.status === 'active' && (
+                        <button className="p-1.5 bg-white rounded-lg shadow-md hover:bg-gray-100">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                    
                     {listing.status === 'sold' && (
                       <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                         <span className="bg-white px-3 py-1 rounded-full text-sm font-bold">PRODATO</span>
@@ -174,7 +195,7 @@ export default function ProfilePage() {
 
                   <div className="p-3">
                     <h3 className="font-medium text-sm truncate">{listing.title}</h3>
-                    <p className="text-orange-500 font-bold text-sm mt-1">{listing.price.toLocaleString()} RSD</p>
+                    <p className="text-orange-500 font-bold">{listing.price.toLocaleString()} RSD</p>
                   </div>
                 </div>
               ))}

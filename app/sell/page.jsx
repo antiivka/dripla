@@ -192,4 +192,174 @@ export default function SellPage() {
               </label>
               <textarea
                 value={formData.description}
-                onChange={(e) => setFormData({...formData, d
+                onChange={(e) => setFormData({...formData, description: e.target.value})}
+                placeholder="Opišite artikal detaljno - materijal, stanje, razlog prodaje..."
+                rows={4}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
+              />
+              {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
+            </div>
+
+            {/* Category */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Kategorija <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={formData.category}
+                onChange={(e) => setFormData({...formData, category: e.target.value, subcategory: '', size: ''})}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
+              >
+                <option value="">Izaberi kategoriju</option>
+                {Object.keys(categories).map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+              {errors.category && <p className="text-red-500 text-sm mt-1">{errors.category}</p>}
+            </div>
+
+            {/* Subcategory */}
+            {formData.category && (
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Potkategorija <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={formData.subcategory}
+                  onChange={(e) => setFormData({...formData, subcategory: e.target.value})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
+                >
+                  <option value="">Izaberi potkategoriju</option>
+                  {categories[formData.category].subcategories.map(sub => (
+                    <option key={sub} value={sub}>{sub}</option>
+                  ))}
+                </select>
+                {errors.subcategory && <p className="text-red-500 text-sm mt-1">{errors.subcategory}</p>}
+              </div>
+            )}
+
+            {/* Gender */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Za koga <span className="text-red-500">*</span>
+              </label>
+              <div className="grid grid-cols-3 gap-2">
+                {['Žene', 'Muškarci', 'Deca'].map(gender => (
+                  <button
+                    key={gender}
+                    type="button"
+                    onClick={() => setFormData({...formData, gender, size: ''})}
+                    className={`py-2 px-4 border rounded-lg transition-colors ${
+                      formData.gender === gender
+                        ? 'bg-purple-600 text-white border-purple-600'
+                        : 'border-gray-300 hover:border-purple-400'
+                    }`}
+                  >
+                    {gender}
+                  </button>
+                ))}
+              </div>
+              {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender}</p>}
+            </div>
+
+            {/* Size */}
+            {formData.category && formData.gender && (
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Veličina <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={formData.size}
+                  onChange={(e) => setFormData({...formData, size: e.target.value})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
+                >
+                  <option value="">Izaberi veličinu</option>
+                  {getSizes().map(size => (
+                    <option key={size} value={size}>{size}</option>
+                  ))}
+                </select>
+                {errors.size && <p className="text-red-500 text-sm mt-1">{errors.size}</p>}
+              </div>
+            )}
+
+            {/* Brand */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Brend
+              </label>
+              <input
+                type="text"
+                value={formData.brand}
+                onChange={(e) => setFormData({...formData, brand: e.target.value})}
+                placeholder="npr. Zara, H&M, Nike..."
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
+              />
+            </div>
+
+            {/* Condition */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Stanje <span className="text-red-500">*</span>
+              </label>
+              <div className="space-y-2">
+                {conditions.map(condition => (
+                  <label key={condition.value} className="flex items-center">
+                    <input
+                      type="radio"
+                      name="condition"
+                      value={condition.value}
+                      checked={formData.condition === condition.value}
+                      onChange={(e) => setFormData({...formData, condition: e.target.value})}
+                      className="mr-3 text-purple-600"
+                    />
+                    <span>{condition.label}</span>
+                  </label>
+                ))}
+              </div>
+              {errors.condition && <p className="text-red-500 text-sm mt-1">{errors.condition}</p>}
+            </div>
+
+            {/* Price */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Cena (RSD) <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="number"
+                value={formData.price}
+                onChange={(e) => setFormData({...formData, price: e.target.value})}
+                placeholder="npr. 2500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
+              />
+              {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price}</p>}
+            </div>
+
+            {/* Location */}
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Lokacija
+              </label>
+              <input
+                type="text"
+                value={formData.location}
+                onChange={(e) => setFormData({...formData, location: e.target.value})}
+                placeholder="npr. Beograd, Novi Sad..."
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
+              />
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full py-3 bg-gradient-to-r from-purple-600 to-orange-500 text-white font-semibold rounded-lg hover:shadow-lg transition-shadow"
+            >
+              Objavi oglas
+            </button>
+          </form>
+        </div>
+      </main>
+      
+      <BottomNav />
+    </div>
+  );
+}

@@ -263,22 +263,28 @@ export default function SearchPage() {
             {/* Price Range - Simple Input Fields */}
             <div>
               <label className="block text-sm font-medium mb-2">Cena (RSD)</label>
-              <div className="flex gap-2 items-center">
-                <input
-                  type="number"
-                  placeholder="Od"
-                  value={minPrice}
-                  onChange={(e) => setMinPrice(Number(e.target.value) || 0)}
-                  className="flex-1 px-3 py-2 border border-black/10 rounded-lg focus:outline-none focus:border-purple"
-                />
-                <span className="text-ink2">-</span>
-                <input
-                  type="number"
-                  placeholder="Do"
-                  value={maxPrice}
-                  onChange={(e) => setMaxPrice(Number(e.target.value) || 50000)}
-                  className="flex-1 px-3 py-2 border border-black/10 rounded-lg focus:outline-none focus:border-purple"
-                />
+              <div className="flex gap-3 items-center">
+                <div className="flex-1">
+                  <label className="text-xs text-ink2 mb-1 block">Od</label>
+                  <input
+                    type="number"
+                    placeholder="0"
+                    value={minPrice}
+                    onChange={(e) => setMinPrice(Number(e.target.value) || 0)}
+                    className="w-full px-3 py-2 border border-black/10 rounded-lg focus:outline-none focus:border-purple"
+                  />
+                </div>
+                <span className="text-ink2 mt-5">-</span>
+                <div className="flex-1">
+                  <label className="text-xs text-ink2 mb-1 block">Do</label>
+                  <input
+                    type="number"
+                    placeholder="50000"
+                    value={maxPrice}
+                    onChange={(e) => setMaxPrice(Number(e.target.value) || 50000)}
+                    className="w-full px-3 py-2 border border-black/10 rounded-lg focus:outline-none focus:border-purple"
+                  />
+                </div>
               </div>
             </div>
 

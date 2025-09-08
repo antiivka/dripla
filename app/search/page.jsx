@@ -131,9 +131,6 @@ export default function SearchPage() {
     return [];
   };
 
-  // Temporary fix for undefined priceRanges error
-  const priceRanges = [];
-
   return (
     <>
       <HeaderMobile />

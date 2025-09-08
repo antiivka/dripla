@@ -79,7 +79,10 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-purple-600 to-orange-500 text-white font-semibold py-3 rounded-xl hover:opacity-90 disabled:opacity-50"
+            className="w-full text-white font-semibold py-3 rounded-xl hover:opacity-90 disabled:opacity-50"
+            style={{
+              background: 'linear-gradient(135deg, #B97EFF 0%, #FFA949 100%)'
+            }}
           >
             {loading ? 'Prijavljivanje...' : 'Prijavi se'}
           </button>

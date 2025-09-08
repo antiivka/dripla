@@ -41,7 +41,8 @@ export default function ProfilePage() {
     location: 'Beograd',
     bio: 'Ljubitelj vintage komada i streetwear-a. Uvek tražim jedinstvene delove.',
     listingsCount: 0,
-    reviewsCount: 0
+    thumbsUp: 127,
+    thumbsDown: 3
   };
 
   // Mock listings data
@@ -73,7 +74,7 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-gray-50">
       <HeaderMobile />
       
-      <main className="pb-20">  {/* Removed pt-14 to fix the gap */}
+      <main className="pb-20">
         {/* Profile Header */}
         <div className="bg-white border-b">
           <div className="max-w-2xl mx-auto px-4 py-6">
@@ -90,14 +91,15 @@ export default function ProfilePage() {
                 <h1 className="text-xl font-bold">{profileData.name}</h1>
                 <p className="text-gray-500 text-sm">{profileData.username}</p>
                 
-                {/* Stats */}
+                {/* Stats with thumbs */}
                 <div className="flex items-center gap-4 mt-2">
                   <span className="text-sm">
                     <span className="font-semibold">{profileData.listingsCount}</span> oglasa
                   </span>
-                  <span className="text-sm">
-                    <span className="font-semibold">{profileData.reviewsCount}</span> recenzija
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-green-600 font-semibold">👍 {profileData.thumbsUp}</span>
+                    <span className="text-red-500 font-semibold">👎 {profileData.thumbsDown}</span>
+                  </div>
                   <span className="text-gray-500 text-sm">{profileData.location}</span>
                 </div>
 
@@ -157,8 +159,8 @@ export default function ProfilePage() {
           {userListings.length > 0 ? (
             <div className="grid grid-cols-2 gap-3">
               {userListings.map((listing) => (
-                <div key={listing.id} className="card p-4 overflow-hidden">  {/* Changed to match homepage card class */}
-                  <div className="aspect-square bg-[#eee] rounded-lg mb-3 relative">  {/* Match homepage styling */}
+                <div key={listing.id} className="card p-4 overflow-hidden">
+                  <div className="aspect-square bg-[#eee] rounded-lg mb-3 relative">
                     {/* Placeholder image */}
                     <div className="w-full h-full flex items-center justify-center text-gray-400">
                       <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">

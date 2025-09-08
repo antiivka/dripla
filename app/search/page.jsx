@@ -131,6 +131,9 @@ export default function SearchPage() {
     return [];
   };
 
+  // Define priceRanges to prevent reference error
+  const priceRanges = [];
+
   return (
     <>
       <HeaderMobile />

@@ -1,76 +1,105 @@
-// app/profil/page.jsx
+// app/login/page.jsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
-import HeaderMobile from '@/components/HeaderMobile';
-import BottomNav from '@/components/BottomNav';
-import FABs from '@/components/FABs';
 import Link from 'next/link';
 
-export default function ProfilePage() {
+export default function LoginPage() {
   const router = useRouter();
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session) {
-          setUser(session.user);
-        } else {
-          router.push('/login');
-        }
-      } catch (error) {
-        console.error('Error checking session:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    checkUser();
-  }, [router]);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Učitavanje...</p>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return null;
-  }
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      
+      if (error) throw error;
+      
+      // Redirect after successful login
+      window.location.href = '/profil';
+    } catch (error) {
+      setError(error.message || 'Greška pri prijavi');
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <HeaderMobile />
-      
-      <main className="pb-20 pt-14">
-        <div className="bg-white border-b">
-          <div className="max-w-2xl mx-auto px-4 py-6">
-            <h1 className="text-2xl font-bold mb-4">Moj profil</h1>
-            <p className="text-gray-600">Dobrodošao/la!</p>
-            <p className="text-sm text-gray-500 mt-2">Email: {user.email}</p>
-            
-            <button
-              onClick={async () => {
-                await supabase.auth.signOut();
-                router.push('/login');
-              }}
-              className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg"
-            >
-              Odjavi se
-            </button>
-          </div>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <Link href="/">
+            <img src="/logo.png" alt="Dripla" className="h-12 mx-auto mb-4" />
+          </Link>
+          <h1 className="text-2xl font-bold">Dobrodošao nazad!</h1>
+          <p className="text-gray-600 mt-2">Uloguj se na svoj Dripla nalog</p>
         </div>
-      </main>
 
-      <FABs />
-      <BottomNav />
+        <form onSubmit={handleLogin} className="bg-white rounded-2xl shadow p-6 space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-purple-600"
+              placeholder="tvoj@email.com"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">Lozinka</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-purple-600"
+              placeholder="••••••••"
+              required
+            />
+          </div>
+
+          {error && (
+            <div className="bg-red-50 text-red-600 text-sm p-3 rounded-xl">
+              {error}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-purple-600 to-orange-500 text-white font-semibold py-3 rounded-xl hover:opacity-90 disabled:opacity-50"
+          >
+            {loading ? 'Prijavljivanje...' : 'Prijavi se'}
+          </button>
+        </form>
+
+        <div className="text-center mt-6">
+          <p className="text-gray-600">
+            Nemaš nalog?{' '}
+            <Link href="/register" className="text-purple-600 font-medium">
+              Registruj se
+            </Link>
+          </p>
+        </div>
+
+        <div className="text-center mt-4">
+          <Link href="/" className="text-gray-500 text-sm">
+            ← Nazad na početnu
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 // app/login/page.jsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import Link from 'next/link';
@@ -15,27 +15,33 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Check if user is already logged in
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        router.push('/profil');
+      }
+    };
+    checkUser();
+  }, [router]);
+
   const handleAuth = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    if (!supabase) {
-      setError('Greška: Supabase nije konfigurisan');
-      setLoading(false);
-      return;
-    }
-
     try {
       if (isLogin) {
-        // Login
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
         
         if (error) throw error;
-        router.push('/profil');
+        
+        // Force redirect after successful login
+        window.location.href = '/profil';
       } else {
         // Sign up
         const { data, error } = await supabase.auth.signUp({
@@ -50,12 +56,11 @@ export default function LoginPage() {
         
         if (error) throw error;
         
-        // Auto login after signup
-        router.push('/profil');
+        // Force redirect after signup
+        window.location.href = '/profil';
       }
     } catch (error) {
       setError(error.message);
-    } finally {
       setLoading(false);
     }
   };
@@ -68,12 +73,12 @@ export default function LoginPage() {
           <Link href="/">
             <img src="/logo.png" alt="Dripla" className="h-12 mx-auto mb-4" />
           </Link>
-         <h1 className="text-2xl font-bold text-ink">
-  {isLogin ? 'Dobrodošao nazad!' : 'Pridruži se Dripli'}
-</h1>
-<p className="text-ink2 mt-2">
-  {isLogin ? 'Uloguj se na svoj Dripla nalog' : 'Napravi nalog i počni prodaju'}
-</p>
+          <h1 className="text-2xl font-bold text-ink">
+            {isLogin ? 'Dobrodošao nazad!' : 'Pridruži se Dripli'}
+          </h1>
+          <p className="text-ink2 mt-2">
+            {isLogin ? 'Uloguj se na svoj Dripla nalog' : 'Napravi nalog i počni prodaju'}
+          </p>
         </div>
 
         {/* Form */}
@@ -132,7 +137,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-purple to-orange text-white font-semibold py-3 rounded-xl hover:opacity-90 transition disabled:opacity-50"
+            className="w-full bg-gradient-to-r from-purple-600 to-orange-500 text-white font-semibold py-3 rounded-xl hover:opacity-90 transition disabled:opacity-50"
           >
             {loading ? 'Molim sačekaj...' : (isLogin ? 'Prijavi se' : 'Napravi nalog')}
           </button>
@@ -148,7 +153,7 @@ export default function LoginPage() {
               setIsLogin(!isLogin);
               setError('');
             }}
-            className="text-purple font-semibold ml-2 hover:underline"
+            className="text-purple-600 font-semibold ml-2 hover:underline"
           >
             {isLogin ? 'Registruj se' : 'Prijavi se'}
           </button>

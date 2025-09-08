@@ -22,8 +22,9 @@ export default function SearchPage() {
   const [selectedGender, setSelectedGender] = useState('sve');
   const [selectedMainCategory, setSelectedMainCategory] = useState('sve');
   const [selectedSubCategory, setSelectedSubCategory] = useState('sve');
-  const [selectedSize, setSelectedSize] = useState('');
-  const [priceRange, setPriceRange] = useState('sve');
+  const [selectedSizes, setSelectedSizes] = useState([]);
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(50000);
   const [showFilters, setShowFilters] = useState(false);
 
   // Mock search results
@@ -131,8 +132,14 @@ export default function SearchPage() {
     return [];
   };
 
-  // Define priceRanges to prevent reference error
-  const priceRanges = [];
+  // Toggle size selection
+  const toggleSize = (size) => {
+    if (selectedSizes.includes(size)) {
+      setSelectedSizes(selectedSizes.filter(s => s !== size));
+    } else {
+      setSelectedSizes([...selectedSizes, size]);
+    }
+  };
 
   return (
     <>
@@ -205,7 +212,7 @@ export default function SearchPage() {
                 value={selectedMainCategory}
                 onChange={(e) => {
                   setSelectedMainCategory(e.target.value);
-                  setSelectedSubCategory('sve'); // Reset subcategory when main changes
+                  setSelectedSubCategory('sve');
                 }}
                 className="w-full px-3 py-2 border border-black/10 rounded-lg focus:outline-none focus:border-purple"
               >
@@ -215,7 +222,7 @@ export default function SearchPage() {
               </select>
             </div>
 
-            {/* Subcategory Filter - Only shows if a main category is selected */}
+            {/* Subcategory Filter */}
             {selectedMainCategory !== 'sve' && (
               <div>
                 <label className="block text-sm font-medium mb-2">Tip</label>
@@ -231,16 +238,18 @@ export default function SearchPage() {
               </div>
             )}
 
-            {/* Size Filter */}
+            {/* Size Filter - Multiple Selection */}
             <div>
-              <label className="block text-sm font-medium mb-2">Veličina</label>
+              <label className="block text-sm font-medium mb-2">
+                Veličina {selectedSizes.length > 0 && `(${selectedSizes.length})`}
+              </label>
               <div className="flex flex-wrap gap-2">
                 {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map(size => (
                   <button
                     key={size}
-                    onClick={() => setSelectedSize(selectedSize === size ? '' : size)}
+                    onClick={() => toggleSize(size)}
                     className={`px-3 py-1 border rounded-lg text-sm transition ${
-                      selectedSize === size 
+                      selectedSizes.includes(size)
                         ? 'border-purple bg-purple/10 text-purple' 
                         : 'border-black/10 hover:bg-black/5'
                     }`}
@@ -251,18 +260,26 @@ export default function SearchPage() {
               </div>
             </div>
 
-            {/* Price Range Filter */}
+            {/* Price Range - Simple Input Fields */}
             <div>
-              <label className="block text-sm font-medium mb-2">Cena</label>
-              <select
-                value={priceRange}
-                onChange={(e) => setPriceRange(e.target.value)}
-                className="w-full px-3 py-2 border border-black/10 rounded-lg focus:outline-none focus:border-purple"
-              >
-                {priceRanges.map(range => (
-                  <option key={range.value} value={range.value}>{range.label}</option>
-                ))}
-              </select>
+              <label className="block text-sm font-medium mb-2">Cena (RSD)</label>
+              <div className="flex gap-2 items-center">
+                <input
+                  type="number"
+                  placeholder="Od"
+                  value={minPrice}
+                  onChange={(e) => setMinPrice(Number(e.target.value) || 0)}
+                  className="flex-1 px-3 py-2 border border-black/10 rounded-lg focus:outline-none focus:border-purple"
+                />
+                <span className="text-ink2">-</span>
+                <input
+                  type="number"
+                  placeholder="Do"
+                  value={maxPrice}
+                  onChange={(e) => setMaxPrice(Number(e.target.value) || 50000)}
+                  className="flex-1 px-3 py-2 border border-black/10 rounded-lg focus:outline-none focus:border-purple"
+                />
+              </div>
             </div>
 
             {/* Clear Filters */}
@@ -270,8 +287,9 @@ export default function SearchPage() {
               onClick={() => {
                 setSelectedMainCategory('sve');
                 setSelectedSubCategory('sve');
-                setSelectedSize('');
-                setPriceRange('sve');
+                setSelectedSizes([]);
+                setMinPrice(0);
+                setMaxPrice(50000);
                 setSelectedGender('sve');
               }}
               className="text-sm text-purple hover:underline"

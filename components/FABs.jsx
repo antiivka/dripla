@@ -7,9 +7,8 @@ export default function FABs({ showDrop = true }) {
   const user = useAuth();
   const isPremium = false;
   
-  // TEMPORARILY always go to /sell for testing
-  const toAdd = "/sell";  // Changed this line
-  const toDrop = !user ? "/auth" : (isPremium ? "/drops/create" : "/upgrade");
+  const toAdd = user ? "/sell" : "/login";  // Changed from /auth to /login
+  const toDrop = !user ? "/login" : (isPremium ? "/drops/create" : "/upgrade");  // Changed here too
   
   return (
     <div className="fixed right-4 bottom-20 flex flex-col items-end gap-3">

@@ -1,5 +1,5 @@
+// components/BottomNav.jsx
 'use client';
-
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
@@ -22,16 +22,15 @@ const items = [
 export default function BottomNav() {
   const pathname = usePathname();
   const user = useAuth();
-
+  
   const gate = (href) =>
-    ['/inbox', '/wishlist', '/profil'].includes(href) ? (user ? href : '/auth') : href;
-
+    ['/inbox', '/wishlist', '/profil'].includes(href) ? (user ? href : '/login') : href;
+  
   return (
     <nav className="fixed bottom-0 inset-x-0 z-20 border-t border-black/10 bg-white">
       <div className="mx-auto max-w-5xl h-14 grid grid-cols-5 text-xs">
         {items.map(({ href, label, Icon }) => {
           const active = pathname === href;
-
           return (
             <Link
               key={href}

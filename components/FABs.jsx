@@ -1,14 +1,16 @@
+// components/FABs.jsx
 'use client';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 
 export default function FABs({ showDrop = true }) {
   const user = useAuth();
-  const isPremium = false; // replace with profile.is_premium when ready
-
-  const toAdd = user ? "/sell" : "/auth";
+  const isPremium = false;
+  
+  // TEMPORARILY always go to /sell for testing
+  const toAdd = "/sell";  // Changed this line
   const toDrop = !user ? "/auth" : (isPremium ? "/drops/create" : "/upgrade");
-
+  
   return (
     <div className="fixed right-4 bottom-20 flex flex-col items-end gap-3">
       {showDrop && (

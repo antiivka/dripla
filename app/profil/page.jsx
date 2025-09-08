@@ -21,9 +21,9 @@ export default function ProfilePage() {
         const { data: { session } } = await supabase.auth.getSession();
         if (session) {
           setUser(session.user);
-       } else {
-  router.replace('/login');
-}
+        } else {
+          router.push('/login');
+        }
       } catch (error) {
         console.error('Error checking session:', error);
       } finally {
@@ -73,7 +73,7 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-gray-50">
       <HeaderMobile />
       
-      <main className="pb-20 pt-14">
+      <main className="pb-20">  {/* Removed pt-14 to fix the gap */}
         {/* Profile Header */}
         <div className="bg-white border-b">
           <div className="max-w-2xl mx-auto px-4 py-6">
@@ -157,9 +157,10 @@ export default function ProfilePage() {
           {userListings.length > 0 ? (
             <div className="grid grid-cols-2 gap-3">
               {userListings.map((listing) => (
-                <div key={listing.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
-                  <div className="aspect-square bg-gray-50 relative">
-                    <div className="w-full h-full flex items-center justify-center text-gray-300">
+                <div key={listing.id} className="card p-4 overflow-hidden">  {/* Changed to match homepage card class */}
+                  <div className="aspect-square bg-[#eee] rounded-lg mb-3 relative">  {/* Match homepage styling */}
+                    {/* Placeholder image */}
+                    <div className="w-full h-full flex items-center justify-center text-gray-400">
                       <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
@@ -168,7 +169,7 @@ export default function ProfilePage() {
                     {/* Action buttons */}
                     <div className="absolute top-2 right-2 flex gap-1">
                       <button 
-                        className="p-2 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
+                        className="p-1.5 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
                         title="Izmeni"
                       >
                         <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -176,7 +177,7 @@ export default function ProfilePage() {
                         </svg>
                       </button>
                       <button 
-                        className="p-2 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
+                        className="p-1.5 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
                         title="Obriši"
                       >
                         <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -185,7 +186,7 @@ export default function ProfilePage() {
                       </button>
                       {listing.status === 'active' ? (
                         <button 
-                          className="p-2 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
+                          className="p-1.5 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
                           title="Označi kao prodato"
                         >
                           <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -194,7 +195,7 @@ export default function ProfilePage() {
                         </button>
                       ) : (
                         <button 
-                          className="p-2 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
+                          className="p-1.5 bg-white rounded-lg shadow hover:shadow-md transition-shadow"
                           title="Vrati u prodaju"
                         >
                           <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -206,16 +207,14 @@ export default function ProfilePage() {
                     
                     {/* Sold badge */}
                     {listing.status === 'sold' && (
-                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                        <span className="bg-white px-4 py-1.5 rounded-full text-sm font-semibold">PRODATO</span>
+                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center rounded-lg">
+                        <span className="bg-white px-3 py-1 rounded-full text-sm font-semibold">PRODATO</span>
                       </div>
                     )}
                   </div>
 
-                  <div className="p-3">
-                    <h3 className="font-medium text-sm text-gray-900">{listing.title}</h3>
-                    <p className="text-orange-500 font-bold mt-1">{listing.price.toLocaleString()} RSD</p>
-                  </div>
+                  <div className="text-sm font-medium">{listing.title}</div>
+                  <div className="text-sm text-ink2">{listing.price.toLocaleString()} RSD · {listing.status === 'active' ? 'aktivno' : 'prodato'}</div>
                 </div>
               ))}
             </div>

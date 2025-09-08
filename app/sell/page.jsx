@@ -23,7 +23,7 @@ export default function SellPage() {
     condition: '',
     brand: '',
     price: '',
-    location: 'Beograd',
+    location: '',
     color: [],
     material: []
   });
@@ -37,77 +37,103 @@ export default function SellPage() {
       'Odeća': {
         'Majice': ['Majice kratkih rukava', 'Majice dugih rukava', 'Majice na bretele', 'Tube top majice', 'Tunike', 'Bluze'],
         'Džemperi': ['Rolke', 'Kardigani', 'Ponco', 'Ostali džemperi'],
-        'Prsluci': [],
+        'Prsluci': ['Prsluci'],
         'Jakne': ['Kaputi', 'Mantili', 'Bunde', 'Ostale jakne'],
         'Pantalone': ['Pantalone', 'Šorcevi', 'Trenerke'],
-        'Farmerke': [],
+        'Farmerke': ['Farmerke'],
         'Suknje': ['Mini', 'Midi', 'Maksi', 'Denim'],
         'Haljine': ['Mini', 'Midi', 'Maksi', 'Svečane'],
-        'Kombinezoni': [],
-        'Setovi': [],
+        'Kombinezoni': ['Kombinezoni'],
+        'Setovi': ['Setovi'],
         'Odela i sakoi': ['Sakoi', 'Odela'],
         'Donji veš i pidžame': ['Gaćice', 'Grudnjaci', 'Shapewear', 'Bodiji', 'Setovi', 'Čarape', 'Najlonke i hulahopke', 'Bademantili', 'Pidžame'],
-        'Kupaći': [],
-        'Kostimi i uniforme': []
+        'Kupaći': ['Kupaći'],
+        'Kostimi i uniforme': ['Kostimi i uniforme']
       },
       'Obuća': {
         'Patike': ['Patike za trčanje', 'Patike za šetnju', 'Patike za planinarenje', 'Cipele patike', 'Sportske patike'],
         'Cipele': ['Cipele na štiklu', 'Ravne cipele', 'Oksfordice', 'Mokasine', 'Espadrile'],
         'Čizme': ['Iznad kolena', 'Do kolena', 'Chelsea čizme', 'Gležnjače', 'Kaubojke', 'Ravne čizme', 'Čizme sa štiklom'],
         'Sandale': ['Ravne sandale', 'Sandale sa štiklom'],
-        'Baletanke': [],
+        'Baletanke': ['Baletanke'],
         'Papuče i japanke': ['Papuče', 'Japanke', 'Klompe']
       },
       'Aksesoari': {
         'Torbe i rančevi': ['Torbice i pismo torbe', 'Torbe za rame', 'Poštar torbe', 'Tašne', 'Velike torbe', 'Rančevi', 'Torbe za plažu', 'Cegeri', 'Torbice oko struka', 'Torbe za laptop', 'Sportske torbe', 'Vikend torbe', 'Koferi', 'Neseseri'],
-        'Kaiš': [],
-        'Novčanici': [],
-        'Satovi': [],
+        'Kaiš': ['Kaiš'],
+        'Novčanici': ['Novčanici'],
+        'Satovi': ['Satovi'],
         'Nakit': ['Prstenje', 'Narukvice', 'Ogrlice', 'Privešci', 'Minđuše'],
         'Naočare': ['Naočare za sunce', 'Naočare za vid'],
         'Kape i šeširi': ['Kačketi', 'Šeširi', 'Kape'],
-        'Šalovi': [],
-        'Rukavice': [],
-        'Ostalo': ['Kisobrani', 'Privešci za ključeve', 'Maske za telefon']
+        'Šalovi': ['Šalovi'],
+        'Rukavice': ['Rukavice'],
+        'Ostalo': ['Kisobrani', 'Privešci za ključeve', 'Maske za telefon', 'Ostalo']
       }
     },
     'Muškarci': {
       'Odeća': {
         'Majice': ['Majice kratkih rukava', 'Majice dugih rukava', 'Majice bez rukava'],
-        'Košulje': [],
+        'Košulje': ['Košulje'],
         'Džemperi': ['Rolke', 'Kardigani', 'Džemperi'],
-        'Prsluci': [],
+        'Prsluci': ['Prsluci'],
         'Jakne': ['Kaputi', 'Mantili', 'Jakne'],
         'Pantalone': ['Farmerke', 'Pantalone', 'Šorcevi', 'Bermude', 'Trenerke'],
         'Odela i sakoi': ['Odela', 'Sakoi'],
         'Donji veš': ['Bokserice', 'Duge gaće', 'Čarape'],
-        'Pidžame': [],
-        'Bademantili': [],
-        'Kupaći': [],
-        'Kostimi i uniforme': []
+        'Pidžame': ['Pidžame'],
+        'Bademantili': ['Bademantili'],
+        'Kupaći': ['Kupaći'],
+        'Kostimi i uniforme': ['Kostimi i uniforme']
       },
       'Obuća': {
         'Patike': ['Patike za trčanje', 'Patike za šetnju', 'Patike za planinarenje', 'Cipele patike', 'Sportske patike'],
         'Cipele': ['Oksfordice', 'Mokasine', 'Espadrile', 'Kanadjanke', 'Radne cipele'],
         'Čizme': ['Chelsea čizme', 'Kaubojke', 'Ostale čizme'],
-        'Sandale': [],
+        'Sandale': ['Sandale'],
         'Papuče i japanke': ['Papuče', 'Japanke']
       },
       'Aksesoari': {
         'Torbe i rančevi': ['Torbe za rame', 'Poštar torbe', 'Velike torbe', 'Rančevi', 'Torbe za laptop', 'Sportske torbe', 'Vikend torbe', 'Koferi'],
-        'Kaiš': [],
-        'Novčanici': [],
-        'Satovi': [],
+        'Kaiš': ['Kaiš'],
+        'Novčanici': ['Novčanici'],
+        'Satovi': ['Satovi'],
         'Nakit': ['Prstenje', 'Narukvice', 'Ogrlice', 'Privešci'],
         'Naočare': ['Naočare za sunce', 'Naočare za vid'],
         'Kape i šeširi': ['Kačketi', 'Šeširi', 'Kape'],
-        'Kravate': [],
-        'Šalovi': [],
-        'Rukavice': [],
-        'Ostalo': ['Kisobrani', 'Privešci za ključeve']
+        'Kravate': ['Kravate'],
+        'Šalovi': ['Šalovi'],
+        'Rukavice': ['Rukavice'],
+        'Ostalo': ['Kisobrani', 'Privešci za ključeve', 'Ostalo']
       }
     }
   };
+
+  // Serbian cities list
+  const cities = [
+    'Beograd', 'Novi Sad', 'Niš', 'Kragujevac', 'Subotica', 'Zrenjanin', 'Pančevo', 'Čačak', 'Kraljevo', 'Smederevo',
+    'Ada', 'Aleksandrovac', 'Aleksinac', 'Alibunar', 'Apatin', 'Aranđelovac', 'Arilje',
+    'Babušnica', 'Bač', 'Bačka Palanka', 'Bačka Topola', 'Bački Petrovac', 'Bajina Bašta', 'Batočina',
+    'Bečej', 'Bela Crkva', 'Bela Palanka', 'Beočin', 'Blace', 'Bogatić', 'Bojnik', 'Boljevac', 'Bor',
+    'Bosilegrad', 'Brus', 'Bujanovac', 'Čajetina', 'Čoka', 'Ćićevac', 'Ćuprija', 'Crna Trava', 'Crveni krst',
+    'Dečani', 'Despotovac', 'Dimitrovgrad', 'Doljevac', 'Đakovica', 'Gadžin Han', 'Glogovac', 'Gnjilane',
+    'Golubac', 'Gora', 'Gornji Milanovac', 'Inđija', 'Irig', 'Istok', 'Ivanjica', 'Jagodina', 'Kačanik',
+    'Kanjiža', 'Kikinda', 'Kladovo', 'Klina', 'Knić', 'Knjaževac', 'Koceljeva', 'Kosjerić', 'Kosovo Polje',
+    'Kosovska Kamenica', 'Kosovska Mitrovica', 'Kovačica', 'Kovin', 'Kragujevac', 'Kraljevo', 'Krupanj',
+    'Kruševac', 'Kučevo', 'Kula', 'Kuršumlija', 'Lajkovac', 'Lapovo', 'Lebane', 'Leposavić', 'Leskovac',
+    'Lipljan', 'Ljig', 'Ljubovija', 'Loznica', 'Lučani', 'Majdanpek', 'Mali Iđoš', 'Mali Zvornik',
+    'Malo Crniće', 'Medveđa', 'Merošina', 'Mionica', 'Negotin', 'Niška Banja', 'Nova Crnja', 'Nova Varoš',
+    'Novi Bečej', 'Novi Kneževac', 'Novi Pazar', 'Novo Brdo', 'Obilić', 'Odžaci', 'Opovo', 'Orahovac',
+    'Osečina', 'Palilula', 'Pantelej', 'Paraćin', 'Peć', 'Pećinci', 'Petrovac na Mlavi', 'Pirot',
+    'Plandište', 'Podujevo', 'Požarevac', 'Požega', 'Preševo', 'Priboj', 'Prijepolje', 'Priština',
+    'Prizren', 'Prokuplje', 'Rača', 'Raška', 'Ražanj', 'Rekovac', 'Ruma', 'Šabac', 'Sečanj', 'Senta',
+    'Sevojno', 'Šid', 'Sjenica', 'Smederevska Palanka', 'Sokobanja', 'Sombor', 'Srbica', 'Srbobran',
+    'Sremska Mitrovica', 'Sremski Karlovci', 'Stara Pazova', 'Štimlje', 'Štrpce', 'Surdulica', 'Suva Reka',
+    'Svilajnac', 'Svrljig', 'Temerin', 'Titel', 'Topola', 'Trgovište', 'Trstenik', 'Tutin', 'Ub', 'Uroševac',
+    'Užice', 'Valjevo', 'Varvarin', 'Velika Plana', 'Veliko Gradište', 'Vitina', 'Vladičin Han', 'Vladimirci',
+    'Vlasotince', 'Vrbas', 'Vranje', 'Vranjska Banja', 'Vrnjačka Banja', 'Vršac', 'Vučitrn', 'Zaječar',
+    'Žabalj', 'Žabari', 'Žagubica', 'Žitište', 'Žitorađa', 'Zvečan', 'Zubin Potok'
+  ].sort();
 
   const conditions = [
     { value: 'novo', label: 'Novo sa etiketom' },
@@ -148,9 +174,18 @@ export default function SellPage() {
     if (!formData.gender) newErrors.gender = 'Pol je obavezan';
     if (!formData.mainCategory) newErrors.mainCategory = 'Glavna kategorija je obavezna';
     if (!formData.category) newErrors.category = 'Kategorija je obavezna';
+    
+    // Check if subcategory is required (when category has subcategories)
+    const hasSubcategories = categoriesStructure[formData.gender]?.[formData.mainCategory]?.[formData.category]?.length > 0;
+    if (hasSubcategories && !formData.detailedSubcategory) {
+      newErrors.detailedSubcategory = 'Tip je obavezan';
+    }
+    
+    if (!formData.brand) newErrors.brand = 'Brend je obavezan';
     if (!formData.size) newErrors.size = 'Veličina je obavezna';
     if (!formData.condition) newErrors.condition = 'Stanje je obavezno';
     if (!formData.price) newErrors.price = 'Cena je obavezna';
+    if (!formData.location) newErrors.location = 'Lokacija je obavezna';
     if (images.length === 0) newErrors.images = 'Dodajte bar jednu sliku';
     
     setErrors(newErrors);
@@ -172,6 +207,20 @@ export default function SellPage() {
       return sizes.shoes;
     }
     return sizes.clothing;
+  };
+
+  // Fix for categories that should appear as single-item arrays
+  const getCategorySubcategories = () => {
+    if (!formData.gender || !formData.mainCategory || !formData.category) return [];
+    
+    let subcats = categoriesStructure[formData.gender][formData.mainCategory][formData.category];
+    
+    // If it's an empty array, add the category name as the only option
+    if (subcats.length === 0) {
+      return [formData.category];
+    }
+    
+    return subcats;
   };
 
   return (
@@ -341,29 +390,30 @@ export default function SellPage() {
               </div>
             )}
 
-            {/* Detailed Subcategory */}
-            {formData.category && categoriesStructure[formData.gender][formData.mainCategory][formData.category].length > 0 && (
+            {/* Detailed Subcategory (Tip) - Now REQUIRED when available */}
+            {formData.category && getCategorySubcategories().length > 0 && (
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  Tip
+                  Tip <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={formData.detailedSubcategory}
                   onChange={(e) => setFormData({...formData, detailedSubcategory: e.target.value})}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
                 >
-                  <option value="">Izaberi tip (opciono)</option>
-                  {categoriesStructure[formData.gender][formData.mainCategory][formData.category].map(sub => (
+                  <option value="">Izaberi tip</option>
+                  {getCategorySubcategories().map(sub => (
                     <option key={sub} value={sub}>{sub}</option>
                   ))}
                 </select>
+                {errors.detailedSubcategory && <p className="text-red-500 text-sm mt-1">{errors.detailedSubcategory}</p>}
               </div>
             )}
 
-            {/* Brand */}
+            {/* Brand - Now REQUIRED */}
             <div>
               <label className="block text-sm font-medium mb-2">
-                Brend
+                Brend <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -372,6 +422,7 @@ export default function SellPage() {
                 placeholder="npr. Zara, H&M, Nike..."
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
               />
+              {errors.brand && <p className="text-red-500 text-sm mt-1">{errors.brand}</p>}
             </div>
 
             {/* Size */}
@@ -459,18 +510,22 @@ export default function SellPage() {
               {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price}</p>}
             </div>
 
-            {/* Location */}
+            {/* Location - Now DROPDOWN with Serbian cities */}
             <div>
               <label className="block text-sm font-medium mb-2">
-                Lokacija
+                Lokacija <span className="text-red-500">*</span>
               </label>
-              <input
-                type="text"
+              <select
                 value={formData.location}
                 onChange={(e) => setFormData({...formData, location: e.target.value})}
-                placeholder="npr. Beograd, Novi Sad..."
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
-              />
+              >
+                <option value="">Izaberi grad</option>
+                {cities.map(city => (
+                  <option key={city} value={city}>{city}</option>
+                ))}
+              </select>
+              {errors.location && <p className="text-red-500 text-sm mt-1">{errors.location}</p>}
             </div>
 
             {/* Submit Button */}

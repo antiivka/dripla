@@ -327,8 +327,7 @@ export default function SellPage() {
                     )}
                   </div>
                 </button>
-                
-                {!isPremium && (
+        
                   {!isPremium && (
   <div className="absolute top-2 right-2">
     <span className="bg-gradient-to-r from-purple-600 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">

@@ -329,12 +329,13 @@ export default function SellPage() {
                 </button>
                 
                 {!isPremium && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-orange-600/10 rounded-2xl flex items-center justify-center backdrop-blur-sm pointer-events-none">
-                    <span className="bg-gradient-to-r from-purple-600 to-orange-500 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-                      Samo Premium
-                    </span>
-                  </div>
-                )}
+                  {!isPremium && (
+  <div className="absolute top-2 right-2">
+    <span className="bg-gradient-to-r from-purple-600 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
+      Samo Premium
+    </span>
+  </div>
+)}
               </div>
             </div>
           </div>

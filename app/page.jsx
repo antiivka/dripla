@@ -23,9 +23,12 @@ export default function SearchPage() {
   const [selectedGender, setSelectedGender] = useState('sve');
   const [selectedMainCategory, setSelectedMainCategory] = useState('sve');
   const [selectedSubCategory, setSelectedSubCategory] = useState('sve');
+  const [selectedVariant, setSelectedVariant] = useState('sve');
   const [selectedSizes, setSelectedSizes] = useState([]);
+  const [selectedConditions, setSelectedConditions] = useState([]);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(50000);
+  const [brandFilter, setBrandFilter] = useState('');
   const [showFilters, setShowFilters] = useState(false);
 
   // Mock search results
@@ -67,12 +70,13 @@ export default function SearchPage() {
     
     if (selectedGender === 'sve') {
       // Combine subcategories from both genders
+      const seenLabels = new Set();
       categories.forEach(genderCat => {
         const mainCat = genderCat.subcategories.find(sub => sub.label === selectedMainCategory);
         if (mainCat) {
           mainCat.items.forEach(item => {
-            // Avoid duplicates
-            if (!subcats.find(s => s.value === item.slug)) {
+            if (!seenLabels.has(item.label)) {
+              seenLabels.add(item.label);
               subcats.push({ value: item.slug, label: item.label });
             }
           });
@@ -94,11 +98,61 @@ export default function SearchPage() {
     return subcats;
   };
 
+  // Get variants for selected subcategory
+  const getVariants = () => {
+    if (selectedSubCategory === 'sve' || selectedMainCategory === 'sve') return [];
+    
+    let variants = [];
+    
+    if (selectedGender === 'sve') {
+      // Check both genders for variants
+      categories.forEach(genderCat => {
+        const mainCat = genderCat.subcategories.find(sub => sub.label === selectedMainCategory);
+        if (mainCat) {
+          const subCat = mainCat.items.find(item => item.slug === selectedSubCategory);
+          if (subCat && subCat.variants) {
+            subCat.variants.forEach(variant => {
+              if (!variants.includes(variant)) {
+                variants.push(variant);
+              }
+            });
+          }
+        }
+      });
+    } else {
+      // Get variants for specific gender
+      const genderCategory = categories.find(cat => cat.label === selectedGender);
+      if (genderCategory) {
+        const mainCat = genderCategory.subcategories.find(sub => sub.label === selectedMainCategory);
+        if (mainCat) {
+          const subCat = mainCat.items.find(item => item.slug === selectedSubCategory);
+          if (subCat && subCat.variants) {
+            variants = subCat.variants;
+          }
+        }
+      }
+    }
+    
+    if (variants.length > 0) {
+      return [{ value: 'sve', label: 'Svi tipovi' }, ...variants.map(v => ({ value: v, label: v }))];
+    }
+    return [];
+  };
+
   // Gender options for filter
   const genderOptions = [
     { value: 'sve', label: 'Sve' },
     { value: 'Žene', label: 'Žene' },
     { value: 'Muškarci', label: 'Muškarci' }
+  ];
+
+  // Condition options
+  const conditionOptions = [
+    { value: 'novo', label: 'Novo sa etiketom' },
+    { value: 'kao-novo', label: 'Kao novo' },
+    { value: 'odlicno', label: 'Odlično' },
+    { value: 'vrlo-dobro', label: 'Vrlo dobro' },
+    { value: 'dobro', label: 'Dobro' }
   ];
 
   // Size options based on category
@@ -119,6 +173,15 @@ export default function SearchPage() {
     }
   };
 
+  // Toggle condition selection
+  const toggleCondition = (condition) => {
+    if (selectedConditions.includes(condition)) {
+      setSelectedConditions(selectedConditions.filter(c => c !== condition));
+    } else {
+      setSelectedConditions([...selectedConditions, condition]);
+    }
+  };
+
   return (
     <>
       <HeaderMobile />
@@ -133,6 +196,7 @@ export default function SearchPage() {
                 setSelectedGender(gender.value);
                 setSelectedMainCategory('sve');
                 setSelectedSubCategory('sve');
+                setSelectedVariant('sve');
               }}
               className={`flex-1 py-2 px-4 rounded-lg font-medium transition ${
                 selectedGender === gender.value
@@ -178,6 +242,7 @@ export default function SearchPage() {
                 onChange={(e) => {
                   setSelectedMainCategory(e.target.value);
                   setSelectedSubCategory('sve');
+                  setSelectedVariant('sve');
                 }}
                 className="w-full px-3 py-2 border border-black/10 rounded-lg focus:outline-none focus:border-purple"
               >
@@ -193,11 +258,30 @@ export default function SearchPage() {
                 <label className="block text-sm font-medium mb-2">Tip</label>
                 <select
                   value={selectedSubCategory}
-                  onChange={(e) => setSelectedSubCategory(e.target.value)}
+                  onChange={(e) => {
+                    setSelectedSubCategory(e.target.value);
+                    setSelectedVariant('sve');
+                  }}
                   className="w-full px-3 py-2 border border-black/10 rounded-lg focus:outline-none focus:border-purple"
                 >
                   {getSubcategories().map(cat => (
                     <option key={cat.value} value={cat.value}>{cat.label}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {/* Variant Filter - Third level */}
+            {selectedSubCategory !== 'sve' && getVariants().length > 0 && (
+              <div>
+                <label className="block text-sm font-medium mb-2">Podtip</label>
+                <select
+                  value={selectedVariant}
+                  onChange={(e) => setSelectedVariant(e.target.value)}
+                  className="w-full px-3 py-2 border border-black/10 rounded-lg focus:outline-none focus:border-purple"
+                >
+                  {getVariants().map(variant => (
+                    <option key={variant.value} value={variant.value}>{variant.label}</option>
                   ))}
                 </select>
               </div>
@@ -227,20 +311,21 @@ export default function SearchPage() {
               </div>
             )}
 
-            {/* Condition Filter */}
+            {/* Condition Filter - Multiple Selection */}
             <div>
-              <label className="block text-sm font-medium mb-2">Stanje</label>
+              <label className="block text-sm font-medium mb-2">
+                Stanje {selectedConditions.length > 0 && `(${selectedConditions.length})`}
+              </label>
               <div className="flex flex-wrap gap-2">
-                {[
-                  { value: 'novo', label: 'Novo sa etiketom' },
-                  { value: 'kao-novo', label: 'Kao novo' },
-                  { value: 'odlicno', label: 'Odlično' },
-                  { value: 'vrlo-dobro', label: 'Vrlo dobro' },
-                  { value: 'dobro', label: 'Dobro' }
-                ].map(condition => (
+                {conditionOptions.map(condition => (
                   <button
                     key={condition.value}
-                    className="px-3 py-1 border border-black/10 rounded-lg text-sm hover:bg-black/5"
+                    onClick={() => toggleCondition(condition.value)}
+                    className={`px-3 py-1 border rounded-lg text-sm transition ${
+                      selectedConditions.includes(condition.value)
+                        ? 'border-purple bg-purple/10 text-purple'
+                        : 'border-black/10 hover:bg-black/5'
+                    }`}
                   >
                     {condition.label}
                   </button>
@@ -281,6 +366,8 @@ export default function SearchPage() {
               <label className="block text-sm font-medium mb-2">Brend</label>
               <input
                 type="text"
+                value={brandFilter}
+                onChange={(e) => setBrandFilter(e.target.value)}
                 placeholder="npr. Zara, Nike, H&M..."
                 className="w-full px-3 py-2 border border-black/10 rounded-lg focus:outline-none focus:border-purple"
               />
@@ -291,10 +378,13 @@ export default function SearchPage() {
               onClick={() => {
                 setSelectedMainCategory('sve');
                 setSelectedSubCategory('sve');
+                setSelectedVariant('sve');
                 setSelectedSizes([]);
+                setSelectedConditions([]);
                 setMinPrice(0);
                 setMaxPrice(50000);
                 setSelectedGender('sve');
+                setBrandFilter('');
               }}
               className="text-sm text-purple hover:underline"
             >

@@ -6,15 +6,6 @@ import { useRouter } from 'next/navigation';
 import HeaderMobile from '@/components/HeaderMobile';
 import BottomNav from '@/components/BottomNav';
 import { useAuth } from '@/hooks/useAuth';
-// app/sell/page.jsx
-'use client';
-
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import HeaderMobile from '@/components/HeaderMobile';
-import BottomNav from '@/components/BottomNav';
-import { useAuth } from '@/hooks/useAuth';
-import { categories } from '@/lib/categories';
 import { categories } from '@/lib/categories';
 
 export default function SellPage() {
@@ -89,23 +80,20 @@ export default function SellPage() {
     'Babušnica', 'Bač', 'Bačka Palanka', 'Bačka Topola', 'Bački Petrovac', 'Bajina Bašta', 'Batočina',
     'Bečej', 'Bela Crkva', 'Bela Palanka', 'Beočin', 'Blace', 'Bogatić', 'Bojnik', 'Boljevac', 'Bor',
     'Bosilegrad', 'Brus', 'Bujanovac', 'Čajetina', 'Čoka', 'Ćićevac', 'Ćuprija', 'Crna Trava', 'Crveni krst',
-    'Dečani', 'Despotovac', 'Dimitrovgrad', 'Doljevac', 'Đakovica', 'Gadžin Han', 'Glogovac', 'Gnjilane',
-    'Golubac', 'Gora', 'Gornji Milanovac', 'Inđija', 'Irig', 'Istok', 'Ivanjica', 'Jagodina', 'Kačanik',
-    'Kanjiža', 'Kikinda', 'Kladovo', 'Klina', 'Knić', 'Knjaževac', 'Koceljeva', 'Kosjerić', 'Kosovo Polje',
-    'Kosovska Kamenica', 'Kosovska Mitrovica', 'Kovačica', 'Kovin', 'Kragujevac', 'Kraljevo', 'Krupanj',
-    'Kruševac', 'Kučevo', 'Kula', 'Kuršumlija', 'Lajkovac', 'Lapovo', 'Lebane', 'Leposavić', 'Leskovac',
-    'Lipljan', 'Ljig', 'Ljubovija', 'Loznica', 'Lučani', 'Majdanpek', 'Mali Iđoš', 'Mali Zvornik',
-    'Malo Crniće', 'Medveđa', 'Merošina', 'Mionica', 'Negotin', 'Niška Banja', 'Nova Crnja', 'Nova Varoš',
-    'Novi Bečej', 'Novi Kneževac', 'Novi Pazar', 'Novo Brdo', 'Obilić', 'Odžaci', 'Opovo', 'Orahovac',
-    'Osečina', 'Palilula', 'Pantelej', 'Paraćin', 'Peć', 'Pećinci', 'Petrovac na Mlavi', 'Pirot',
-    'Plandište', 'Podujevo', 'Požarevac', 'Požega', 'Preševo', 'Priboj', 'Prijepolje', 'Priština',
-    'Prizren', 'Prokuplje', 'Rača', 'Raška', 'Ražanj', 'Rekovac', 'Ruma', 'Šabac', 'Sečanj', 'Senta',
-    'Sevojno', 'Šid', 'Sjenica', 'Smederevska Palanka', 'Sokobanja', 'Sombor', 'Srbica', 'Srbobran',
-    'Sremska Mitrovica', 'Sremski Karlovci', 'Stara Pazova', 'Štimlje', 'Štrpce', 'Surdulica', 'Suva Reka',
-    'Svilajnac', 'Svrljig', 'Temerin', 'Titel', 'Topola', 'Trgovište', 'Trstenik', 'Tutin', 'Ub', 'Uroševac',
-    'Užice', 'Valjevo', 'Varvarin', 'Velika Plana', 'Veliko Gradište', 'Vitina', 'Vladičin Han', 'Vladimirci',
-    'Vlasotince', 'Vrbas', 'Vranje', 'Vranjska Banja', 'Vrnjačka Banja', 'Vršac', 'Vučitrn', 'Zaječar',
-    'Žabalj', 'Žabari', 'Žagubica', 'Žitište', 'Žitorađa', 'Zvečan', 'Zubin Potok'
+    'Despotovac', 'Dimitrovgrad', 'Doljevac', 'Gadžin Han', 'Golubac', 'Gornji Milanovac', 
+    'Inđija', 'Irig', 'Ivanjica', 'Jagodina', 'Kanjiža', 'Kikinda', 'Kladovo', 'Knić', 'Knjaževac', 
+    'Koceljeva', 'Kosjerić', 'Kosovska Kamenica', 'Kovačica', 'Kovin', 'Krupanj', 'Kruševac', 
+    'Kučevo', 'Kula', 'Kuršumlija', 'Lajkovac', 'Lapovo', 'Lebane', 'Leskovac', 'Ljig', 'Ljubovija', 
+    'Loznica', 'Lučani', 'Majdanpek', 'Mali Iđoš', 'Mali Zvornik', 'Malo Crniće', 'Medveđa', 
+    'Merošina', 'Mionica', 'Negotin', 'Nova Crnja', 'Nova Varoš', 'Novi Bečej', 'Novi Kneževac', 
+    'Novi Pazar', 'Odžaci', 'Opovo', 'Osečina', 'Palilula', 'Paraćin', 'Pećinci', 'Petrovac na Mlavi', 
+    'Pirot', 'Plandište', 'Požarevac', 'Požega', 'Preševo', 'Priboj', 'Prijepolje', 'Prokuplje', 
+    'Rača', 'Raška', 'Ražanj', 'Rekovac', 'Ruma', 'Šabac', 'Sečanj', 'Senta', 'Sevojno', 'Šid', 
+    'Sjenica', 'Smederevska Palanka', 'Sokobanja', 'Sombor', 'Srbobran', 'Sremska Mitrovica', 
+    'Sremski Karlovci', 'Stara Pazova', 'Surdulica', 'Svilajnac', 'Svrljig', 'Temerin', 'Titel', 
+    'Topola', 'Trgovište', 'Trstenik', 'Tutin', 'Ub', 'Užice', 'Valjevo', 'Varvarin', 'Velika Plana', 
+    'Veliko Gradište', 'Vladičin Han', 'Vladimirci', 'Vlasotince', 'Vrbas', 'Vranje', 'Vranjska Banja', 
+    'Vrnjačka Banja', 'Vršac', 'Zaječar', 'Žabalj', 'Žabari', 'Žagubica', 'Žitište', 'Žitorađa'
   ].sort();
 
   const conditions = [
@@ -120,8 +108,6 @@ export default function SellPage() {
 
   const colors = ['Crna', 'Bela', 'Smeđa', 'Srebrna', 'Zlatna', 'Žuta', 'Zelena', 'Plava', 'Ljubičasta', 'Roze', 'Crvena', 'Šarena'];
   
-  const materials = ['Pamuk', 'Poliester', 'Vuna', 'Svila', 'Lan', 'Kašmir', 'Viskoza', 'Koža', 'Eko koža', 'Krzno', 'Denim', 'Neopren', 'Gore-Tex', 'Ostalo'];
-
   const sizes = {
     clothing: ['XXXS', 'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     clothingEU: ['32', '34', '36', '38', '40', '42', '44', '46', '48'],
@@ -193,7 +179,6 @@ export default function SellPage() {
   };
 
   const addItemToDrop = () => {
-    // Validate current item
     if (!currentDropItem.title || !currentDropItem.price) {
       alert('Molimo unesite naziv i cenu artikla');
       return;
@@ -204,7 +189,6 @@ export default function SellPage() {
       items: [...dropData.items, { ...currentDropItem, id: Date.now() }]
     });
     
-    // Reset current item form
     setCurrentDropItem({
       title: '',
       description: '',
@@ -296,7 +280,9 @@ export default function SellPage() {
                     <h3 className="font-semibold text-lg mb-1">Pojedinačni oglas</h3>
                     <p className="text-sm text-gray-600">Objavi jedan artikal odmah</p>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-gray-400" />
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </div>
               </button>
 
@@ -323,9 +309,11 @@ export default function SellPage() {
                       Objavi više artikala sa datumom lansiranja
                     </p>
                   </div>
-                  {isPremium && <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-</svg>}
+                  {isPremium && (
+                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  )}
                 </div>
                 {!isPremium && (
                   <div className="absolute inset-0 bg-white/50 rounded-lg flex items-center justify-center">
@@ -355,8 +343,8 @@ export default function SellPage() {
             <div className="flex items-center gap-4 mb-6">
               <button onClick={() => setListingType('')} className="p-2">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-</svg>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
               </button>
               <h1 className="text-2xl font-bold">Kreiraj Drop</h1>
             </div>
@@ -398,7 +386,7 @@ export default function SellPage() {
                     Datum lansiranja <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <Calendar className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                    <span className="absolute left-3 top-3 text-gray-400">📅</span>
                     <input
                       type="date"
                       value={dropData.launchDate}
@@ -415,7 +403,7 @@ export default function SellPage() {
                     Vreme lansiranja <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <Clock className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                    <span className="absolute left-3 top-3 text-gray-400">🕐</span>
                     <input
                       type="time"
                       value={dropData.launchTime}
@@ -447,7 +435,9 @@ export default function SellPage() {
                           onClick={() => removeItemFromDrop(item.id)}
                           className="p-2 text-red-500 hover:bg-red-50 rounded"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
                         </button>
                       </div>
                     ))}
@@ -497,7 +487,9 @@ export default function SellPage() {
                     onClick={addItemToDrop}
                     className="w-full py-2 border-2 border-dashed border-purple-400 text-purple-600 rounded-lg hover:bg-purple-50 transition-colors flex items-center justify-center gap-2"
                   >
-                    <Plus className="w-4 h-4" />
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
                     Dodaj u drop
                   </button>
                 </div>
@@ -529,7 +521,9 @@ export default function SellPage() {
         <div className="max-w-2xl mx-auto px-4 py-6">
           <div className="flex items-center gap-4 mb-6">
             <button onClick={() => setListingType('')} className="p-2">
-              <ArrowLeft className="w-5 h-5" />
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
             </button>
             <h1 className="text-2xl font-bold">Dodaj oglas</h1>
           </div>
@@ -553,14 +547,19 @@ export default function SellPage() {
                       onClick={() => removeImage(index)}
                       className="absolute top-2 right-2 p-1 bg-white rounded-full shadow-md"
                     >
-                      <X className="w-4 h-4" />
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
                     </button>
                   </div>
                 ))}
                 
                 {images.length < 5 && (
                   <label className="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-purple-400 transition-colors">
-                    <Camera className="w-8 h-8 text-gray-400 mb-2" />
+                    <svg className="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
                     <span className="text-xs text-gray-500">Dodaj sliku</span>
                     <input
                       type="file"
@@ -576,6 +575,7 @@ export default function SellPage() {
               <p className="text-xs text-gray-500 mt-2">Možete dodati do 5 slika</p>
             </div>
 
+            {/* All the original form fields continue here unchanged... */}
             {/* Title */}
             <div>
               <label className="block text-sm font-medium mb-2">

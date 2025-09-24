@@ -5,6 +5,7 @@ import { useState } from 'react';
 import HeaderMobile from '@/components/HeaderMobile';
 import BottomNav from '@/components/BottomNav';
 import { IconSearch } from '@/components/icons/Icons';
+import { categories } from '@/lib/categories';
 
 function SearchResultCard({ item }) {
   return (
@@ -22,9 +23,12 @@ export default function SearchPage() {
   const [selectedGender, setSelectedGender] = useState('sve');
   const [selectedMainCategory, setSelectedMainCategory] = useState('sve');
   const [selectedSubCategory, setSelectedSubCategory] = useState('sve');
+  const [selectedVariant, setSelectedVariant] = useState('sve');
   const [selectedSizes, setSelectedSizes] = useState([]);
+  const [selectedConditions, setSelectedConditions] = useState([]);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(50000);
+  const [brandFilter, setBrandFilter] = useState('');
   const [showFilters, setShowFilters] = useState(false);
 
   // Mock search results
@@ -37,99 +41,127 @@ export default function SearchPage() {
     { id: 6, name: 'Converse All Star', price: '5.000', condition: 'Odlično', size: '41' },
   ];
 
-  // Main categories
-  const mainCategories = [
-    { value: 'sve', label: 'Sve kategorije' },
-    { value: 'odeca', label: 'Odeća' },
-    { value: 'obuca', label: 'Obuća' },
-    { value: 'aksesoari', label: 'Aksesoari' }
-  ];
+  // Get main categories from imported data
+  const getMainCategories = () => {
+    if (selectedGender === 'sve') {
+      return [
+        { value: 'sve', label: 'Sve kategorije' },
+        { value: 'Odeća', label: 'Odeća' },
+        { value: 'Obuća', label: 'Obuća' },
+        { value: 'Aksesoari', label: 'Aksesoari' }
+      ];
+    }
+    
+    const genderCategory = categories.find(cat => cat.label === selectedGender);
+    if (!genderCategory) return [{ value: 'sve', label: 'Sve kategorije' }];
+    
+    const mainCats = [{ value: 'sve', label: 'Sve kategorije' }];
+    genderCategory.subcategories.forEach(subcat => {
+      mainCats.push({ value: subcat.label, label: subcat.label });
+    });
+    return mainCats;
+  };
 
   // Get subcategories based on main category and gender
   const getSubcategories = () => {
-    if (selectedMainCategory === 'odeca') {
-      if (selectedGender === 'zene') {
-        return [
-          { value: 'sve', label: 'Sva odeća' },
-          { value: 'majice', label: 'Majice' },
-          { value: 'kosulje', label: 'Košulje' },
-          { value: 'duksevi', label: 'Duksevi' },
-          { value: 'dzemperi', label: 'Džemperi' },
-          { value: 'jakne', label: 'Jakne i prsluci' },
-          { value: 'pantalone', label: 'Pantalone' },
-          { value: 'farmerke', label: 'Farmerke' },
-          { value: 'suknje', label: 'Suknje' },
-          { value: 'haljine', label: 'Haljine' },
-          { value: 'sortsevi', label: 'Šortsevi i bermude' },
-          { value: 'helanke', label: 'Helanke' },
-          { value: 'trenerke', label: 'Trenerke' },
-          { value: 'kombinezoni', label: 'Kombinezoni' }
-        ];
-      } else if (selectedGender === 'muskarci') {
-        return [
-          { value: 'sve', label: 'Sva odeća' },
-          { value: 'majice', label: 'Majice' },
-          { value: 'kosulje', label: 'Košulje' },
-          { value: 'duksevi', label: 'Duksevi' },
-          { value: 'dzemperi', label: 'Džemperi' },
-          { value: 'jakne', label: 'Jakne i prsluci' },
-          { value: 'pantalone', label: 'Pantalone' },
-          { value: 'farmerke', label: 'Farmerke' },
-          { value: 'odela', label: 'Odela i sakoi' },
-          { value: 'sortsevi', label: 'Šortsevi i bermude' },
-          { value: 'trenerke', label: 'Trenerke' }
-        ];
+    if (selectedMainCategory === 'sve') return [];
+    
+    let subcats = [{ value: 'sve', label: `Svi ${selectedMainCategory.toLowerCase()}` }];
+    
+    if (selectedGender === 'sve') {
+      // Combine subcategories from both genders
+      const seenLabels = new Set();
+      categories.forEach(genderCat => {
+        const mainCat = genderCat.subcategories.find(sub => sub.label === selectedMainCategory);
+        if (mainCat) {
+          mainCat.items.forEach(item => {
+            if (!seenLabels.has(item.label)) {
+              seenLabels.add(item.label);
+              subcats.push({ value: item.slug, label: item.label });
+            }
+          });
+        }
+      });
+    } else {
+      // Get subcategories for specific gender
+      const genderCategory = categories.find(cat => cat.label === selectedGender);
+      if (genderCategory) {
+        const mainCat = genderCategory.subcategories.find(sub => sub.label === selectedMainCategory);
+        if (mainCat) {
+          mainCat.items.forEach(item => {
+            subcats.push({ value: item.slug, label: item.label });
+          });
+        }
       }
-      // Mixed gender clothing
-      return [
-        { value: 'sve', label: 'Sva odeća' },
-        { value: 'majice', label: 'Majice' },
-        { value: 'kosulje', label: 'Košulje' },
-        { value: 'duksevi', label: 'Duksevi' },
-        { value: 'dzemperi', label: 'Džemperi' },
-        { value: 'jakne', label: 'Jakne i prsluci' },
-        { value: 'pantalone', label: 'Pantalone' },
-        { value: 'farmerke', label: 'Farmerke' }
-      ];
-    } else if (selectedMainCategory === 'obuca') {
-      if (selectedGender === 'zene') {
-        return [
-          { value: 'sve', label: 'Sva obuća' },
-          { value: 'patike', label: 'Patike' },
-          { value: 'cipele-stikla', label: 'Cipele na štiklu' },
-          { value: 'ravne-cipele', label: 'Ravne cipele' },
-          { value: 'cizme', label: 'Čizme' },
-          { value: 'sandale', label: 'Sandale' }
-        ];
-      } else if (selectedGender === 'muskarci') {
-        return [
-          { value: 'sve', label: 'Sva obuća' },
-          { value: 'patike', label: 'Patike' },
-          { value: 'cipele', label: 'Cipele' },
-          { value: 'cizme', label: 'Čizme' },
-          { value: 'sandale', label: 'Sandale' }
-        ];
+    }
+    
+    return subcats;
+  };
+
+  // Get variants for selected subcategory
+  const getVariants = () => {
+    if (selectedSubCategory === 'sve' || selectedMainCategory === 'sve') return [];
+    
+    let variants = [];
+    
+    if (selectedGender === 'sve') {
+      // Check both genders for variants
+      categories.forEach(genderCat => {
+        const mainCat = genderCat.subcategories.find(sub => sub.label === selectedMainCategory);
+        if (mainCat) {
+          const subCat = mainCat.items.find(item => item.slug === selectedSubCategory);
+          if (subCat && subCat.variants) {
+            subCat.variants.forEach(variant => {
+              if (!variants.includes(variant)) {
+                variants.push(variant);
+              }
+            });
+          }
+        }
+      });
+    } else {
+      // Get variants for specific gender
+      const genderCategory = categories.find(cat => cat.label === selectedGender);
+      if (genderCategory) {
+        const mainCat = genderCategory.subcategories.find(sub => sub.label === selectedMainCategory);
+        if (mainCat) {
+          const subCat = mainCat.items.find(item => item.slug === selectedSubCategory);
+          if (subCat && subCat.variants) {
+            variants = subCat.variants;
+          }
+        }
       }
-      return [
-        { value: 'sve', label: 'Sva obuća' },
-        { value: 'patike', label: 'Patike' },
-        { value: 'cipele', label: 'Cipele' },
-        { value: 'cizme', label: 'Čizme' },
-        { value: 'sandale', label: 'Sandale' }
-      ];
-    } else if (selectedMainCategory === 'aksesoari') {
-      return [
-        { value: 'sve', label: 'Svi aksesoari' },
-        { value: 'torbe', label: 'Torbe i rančevi' },
-        { value: 'kaisevi', label: 'Kaisevi' },
-        { value: 'novcanci', label: 'Novčanici' },
-        { value: 'satovi', label: 'Satovi' },
-        { value: 'nakit', label: 'Nakit' },
-        { value: 'naocare', label: 'Naočare' },
-        { value: 'kape', label: 'Kape i šeširi' }
-      ];
+    }
+    
+    if (variants.length > 0) {
+      return [{ value: 'sve', label: 'Svi tipovi' }, ...variants.map(v => ({ value: v, label: v }))];
     }
     return [];
+  };
+
+  // Gender options for filter
+  const genderOptions = [
+    { value: 'sve', label: 'Sve' },
+    { value: 'Žene', label: 'Žene' },
+    { value: 'Muškarci', label: 'Muškarci' }
+  ];
+
+  // Condition options
+  const conditionOptions = [
+    { value: 'novo', label: 'Novo sa etiketom' },
+    { value: 'kao-novo', label: 'Kao novo' },
+    { value: 'odlicno', label: 'Odlično' },
+    { value: 'vrlo-dobro', label: 'Vrlo dobro' },
+    { value: 'dobro', label: 'Dobro' }
+  ];
+
+  // Size options based on category
+  const getSizeOptions = () => {
+    if (selectedMainCategory === 'Obuća') {
+      return ['35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46'];
+    } else {
+      return ['XXXS', 'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
+    }
   };
 
   // Toggle size selection
@@ -141,6 +173,15 @@ export default function SearchPage() {
     }
   };
 
+  // Toggle condition selection
+  const toggleCondition = (condition) => {
+    if (selectedConditions.includes(condition)) {
+      setSelectedConditions(selectedConditions.filter(c => c !== condition));
+    } else {
+      setSelectedConditions([...selectedConditions, condition]);
+    }
+  };
+
   return (
     <>
       <HeaderMobile />
@@ -148,36 +189,24 @@ export default function SearchPage() {
       <main className="mx-auto max-w-5xl px-4 pt-4 pb-24">
         {/* Gender Tabs */}
         <div className="flex gap-2 mb-4">
-          <button
-            onClick={() => setSelectedGender('sve')}
-            className={`flex-1 py-2 px-4 rounded-lg font-medium transition ${
-              selectedGender === 'sve'
-                ? 'bg-gradient-to-r from-purple to-orange text-white'
-                : 'bg-white border border-black/10 hover:bg-black/5'
-            }`}
-          >
-            Sve
-          </button>
-          <button
-            onClick={() => setSelectedGender('zene')}
-            className={`flex-1 py-2 px-4 rounded-lg font-medium transition ${
-              selectedGender === 'zene'
-                ? 'bg-gradient-to-r from-purple to-orange text-white'
-                : 'bg-white border border-black/10 hover:bg-black/5'
-            }`}
-          >
-            Žene
-          </button>
-          <button
-            onClick={() => setSelectedGender('muskarci')}
-            className={`flex-1 py-2 px-4 rounded-lg font-medium transition ${
-              selectedGender === 'muskarci'
-                ? 'bg-gradient-to-r from-purple to-orange text-white'
-                : 'bg-white border border-black/10 hover:bg-black/5'
-            }`}
-          >
-            Muškarci
-          </button>
+          {genderOptions.map(gender => (
+            <button
+              key={gender.value}
+              onClick={() => {
+                setSelectedGender(gender.value);
+                setSelectedMainCategory('sve');
+                setSelectedSubCategory('sve');
+                setSelectedVariant('sve');
+              }}
+              className={`flex-1 py-2 px-4 rounded-lg font-medium transition ${
+                selectedGender === gender.value
+                  ? 'bg-gradient-to-r from-purple to-orange text-white'
+                  : 'bg-white border border-black/10 hover:bg-black/5'
+              }`}
+            >
+              {gender.label}
+            </button>
+          ))}
         </div>
 
         {/* Search Bar */}
@@ -213,22 +242,26 @@ export default function SearchPage() {
                 onChange={(e) => {
                   setSelectedMainCategory(e.target.value);
                   setSelectedSubCategory('sve');
+                  setSelectedVariant('sve');
                 }}
                 className="w-full px-3 py-2 border border-black/10 rounded-lg focus:outline-none focus:border-purple"
               >
-                {mainCategories.map(cat => (
+                {getMainCategories().map(cat => (
                   <option key={cat.value} value={cat.value}>{cat.label}</option>
                 ))}
               </select>
             </div>
 
             {/* Subcategory Filter */}
-            {selectedMainCategory !== 'sve' && (
+            {selectedMainCategory !== 'sve' && getSubcategories().length > 1 && (
               <div>
                 <label className="block text-sm font-medium mb-2">Tip</label>
                 <select
                   value={selectedSubCategory}
-                  onChange={(e) => setSelectedSubCategory(e.target.value)}
+                  onChange={(e) => {
+                    setSelectedSubCategory(e.target.value);
+                    setSelectedVariant('sve');
+                  }}
                   className="w-full px-3 py-2 border border-black/10 rounded-lg focus:outline-none focus:border-purple"
                 >
                   {getSubcategories().map(cat => (
@@ -238,29 +271,69 @@ export default function SearchPage() {
               </div>
             )}
 
+            {/* Variant Filter - Third level */}
+            {selectedSubCategory !== 'sve' && getVariants().length > 0 && (
+              <div>
+                <label className="block text-sm font-medium mb-2">Podtip</label>
+                <select
+                  value={selectedVariant}
+                  onChange={(e) => setSelectedVariant(e.target.value)}
+                  className="w-full px-3 py-2 border border-black/10 rounded-lg focus:outline-none focus:border-purple"
+                >
+                  {getVariants().map(variant => (
+                    <option key={variant.value} value={variant.value}>{variant.label}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
             {/* Size Filter - Multiple Selection */}
+            {(selectedMainCategory === 'Odeća' || selectedMainCategory === 'Obuća' || selectedMainCategory === 'sve') && (
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Veličina {selectedSizes.length > 0 && `(${selectedSizes.length})`}
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {getSizeOptions().map(size => (
+                    <button
+                      key={size}
+                      onClick={() => toggleSize(size)}
+                      className={`px-3 py-1 border rounded-lg text-sm transition ${
+                        selectedSizes.includes(size)
+                          ? 'border-purple bg-purple/10 text-purple' 
+                          : 'border-black/10 hover:bg-black/5'
+                      }`}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Condition Filter - Multiple Selection */}
             <div>
               <label className="block text-sm font-medium mb-2">
-                Veličina {selectedSizes.length > 0 && `(${selectedSizes.length})`}
+                Stanje {selectedConditions.length > 0 && `(${selectedConditions.length})`}
               </label>
               <div className="flex flex-wrap gap-2">
-                {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map(size => (
+                {conditionOptions.map(condition => (
                   <button
-                    key={size}
-                    onClick={() => toggleSize(size)}
+                    key={condition.value}
+                    onClick={() => toggleCondition(condition.value)}
                     className={`px-3 py-1 border rounded-lg text-sm transition ${
-                      selectedSizes.includes(size)
-                        ? 'border-purple bg-purple/10 text-purple' 
+                      selectedConditions.includes(condition.value)
+                        ? 'border-purple bg-purple/10 text-purple'
                         : 'border-black/10 hover:bg-black/5'
                     }`}
                   >
-                    {size}
+                    {condition.label}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Price Range - Simple Input Fields */}
+            {/* Price Range */}
             <div>
               <label className="block text-sm font-medium mb-2">Cena (RSD)</label>
               <div className="flex gap-3 items-center">
@@ -288,15 +361,30 @@ export default function SearchPage() {
               </div>
             </div>
 
+            {/* Brand Filter */}
+            <div>
+              <label className="block text-sm font-medium mb-2">Brend</label>
+              <input
+                type="text"
+                value={brandFilter}
+                onChange={(e) => setBrandFilter(e.target.value)}
+                placeholder="npr. Zara, Nike, H&M..."
+                className="w-full px-3 py-2 border border-black/10 rounded-lg focus:outline-none focus:border-purple"
+              />
+            </div>
+
             {/* Clear Filters */}
             <button
               onClick={() => {
                 setSelectedMainCategory('sve');
                 setSelectedSubCategory('sve');
+                setSelectedVariant('sve');
                 setSelectedSizes([]);
+                setSelectedConditions([]);
                 setMinPrice(0);
                 setMaxPrice(50000);
                 setSelectedGender('sve');
+                setBrandFilter('');
               }}
               className="text-sm text-purple hover:underline"
             >

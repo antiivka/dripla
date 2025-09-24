@@ -6,7 +6,15 @@ import { useRouter } from 'next/navigation';
 import HeaderMobile from '@/components/HeaderMobile';
 import BottomNav from '@/components/BottomNav';
 import { useAuth } from '@/hooks/useAuth';
-import { Crown, Lock, Camera, X, Calendar, Clock, Plus, Trash2 } from 'lucide-react';
+// app/sell/page.jsx
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import HeaderMobile from '@/components/HeaderMobile';
+import BottomNav from '@/components/BottomNav';
+import { useAuth } from '@/hooks/useAuth';
+import { categories } from '@/lib/categories';
 import { categories } from '@/lib/categories';
 
 export default function SellPage() {
@@ -249,7 +257,7 @@ export default function SellPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2">
-                    {isPremium && <Crown className="w-4 h-4 text-purple-600" />}
+                    {isPremium && <span>👑</span>}
                     <span className="font-medium">
                       {isPremium ? 'Premium nalog' : 'Besplatan nalog'}
                     </span>
@@ -309,13 +317,15 @@ export default function SellPage() {
                   <div>
                     <div className="flex items-center gap-2">
                       <h3 className="font-semibold text-lg mb-1">Drop kolekciju</h3>
-                      {!isPremium && <Lock className="w-4 h-4 text-gray-400" />}
+                      {!isPremium && <span>🔒</span>}
                     </div>
                     <p className="text-sm text-gray-600">
                       Objavi više artikala sa datumom lansiranja
                     </p>
                   </div>
-                  {isPremium && <ChevronRight className="w-5 h-5 text-gray-400" />}
+                  {isPremium && <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+</svg>}
                 </div>
                 {!isPremium && (
                   <div className="absolute inset-0 bg-white/50 rounded-lg flex items-center justify-center">
@@ -344,7 +354,9 @@ export default function SellPage() {
           <div className="max-w-2xl mx-auto px-4 py-6">
             <div className="flex items-center gap-4 mb-6">
               <button onClick={() => setListingType('')} className="p-2">
-                <ArrowLeft className="w-5 h-5" />
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+</svg>
               </button>
               <h1 className="text-2xl font-bold">Kreiraj Drop</h1>
             </div>

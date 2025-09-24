@@ -226,7 +226,7 @@ export default function SellPage() {
     return subcats;
   };
 
-  // If no listing type selected, show selection screen with IMPROVED STYLING
+  // If no listing type selected, show selection screen
   if (!listingType) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -236,7 +236,7 @@ export default function SellPage() {
           <div className="max-w-2xl mx-auto px-4 py-6">
             <h1 className="text-2xl font-bold mb-6 text-center">Šta želiš da objaviš?</h1>
             
-            {/* Account status card - IMPROVED */}
+            {/* Account status card */}
             <div className={`mb-6 p-4 rounded-2xl shadow-sm ${
               isPremium 
                 ? 'bg-gradient-to-r from-purple-50 to-orange-50 border border-purple-200' 
@@ -268,7 +268,7 @@ export default function SellPage() {
             </div>
 
             <div className="space-y-4">
-              {/* Single listing option - IMPROVED */}
+              {/* Single listing option */}
               <button
                 onClick={() => {
                   if (!isPremium && remainingFreeListings === 0) {
@@ -292,50 +292,48 @@ export default function SellPage() {
                 </div>
               </button>
 
-              {/* Drop option - IMPROVED */}
-              <div className="relative">
-                <button
-                  onClick={() => {
-                    if (!isPremium) {
-                      return;
-                    }
-                    setListingType('drop');
-                  }}
-                  className={`w-full p-6 bg-white rounded-2xl shadow-sm border-2 ${
-                    isPremium 
-                      ? 'border-transparent hover:border-purple-400 hover:shadow-md cursor-pointer' 
-                      : 'border-gray-200 opacity-75 cursor-not-allowed'
-                  } transition-all text-left group`}
-                  disabled={!isPremium}
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="flex items-center gap-3">
-                        <h3 className="font-semibold text-xl mb-2">Drop kolekciju</h3>
-                        {!isPremium && <span className="text-2xl">🔒</span>}
-                      </div>
-                      <p className="text-gray-600">
-                        Objavi više artikala sa datumom lansiranja
-                      </p>
+              {/* Drop option - FIXED: No blur */}
+              <button
+                onClick={() => {
+                  if (!isPremium) {
+                    alert('Drop funkcija je dostupna samo za Premium korisnike. Nadogradite nalog da biste kreirali drop kolekcije.');
+                    return;
+                  }
+                  setListingType('drop');
+                }}
+                className={`w-full p-6 bg-white rounded-2xl shadow-sm border-2 ${
+                  isPremium 
+                    ? 'border-transparent hover:border-purple-400 hover:shadow-md' 
+                    : 'border-gray-200 opacity-60'
+                } transition-all text-left group relative`}
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="flex items-center gap-3">
+                      <h3 className={`font-semibold text-xl mb-2 ${!isPremium ? 'text-gray-500' : ''}`}>
+                        Drop kolekciju
+                      </h3>
+                      {!isPremium && (
+                        <span className="bg-gradient-to-r from-purple-600 to-orange-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                          Premium
+                        </span>
+                      )}
                     </div>
-                    {isPremium && (
-                      <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-purple-100 transition-colors">
-                        <svg className="w-6 h-6 text-gray-600 group-hover:text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </div>
+                    <p className={`${!isPremium ? 'text-gray-500' : 'text-gray-600'}`}>
+                      Objavi više artikala sa datumom lansiranja
+                    </p>
+                  </div>
+                  <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
+                    {!isPremium ? (
+                      <span className="text-2xl">🔒</span>
+                    ) : (
+                      <svg className="w-6 h-6 text-gray-600 group-hover:text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
                     )}
                   </div>
-                </button>
-        
-                  {!isPremium && (
-  <div className="absolute top-2 right-2">
-    <span className="bg-gradient-to-r from-purple-600 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
-      Samo Premium
-    </span>
-  </div>
-)}
-              </div>
+                </div>
+              </button>
             </div>
           </div>
         </main>
@@ -525,7 +523,7 @@ export default function SellPage() {
     );
   }
 
-  // Original single listing form (with back button) - ALL THE REST STAYS THE SAME
+  // Original single listing form (with back button)
   return (
     <div className="min-h-screen bg-gray-50">
       <HeaderMobile />

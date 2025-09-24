@@ -1,16 +1,28 @@
 // app/sell/page.jsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import HeaderMobile from '@/components/HeaderMobile';
 import BottomNav from '@/components/BottomNav';
 import { useAuth } from '@/hooks/useAuth';
+import { Crown, Lock, Camera, X, Calendar, Clock, Plus, Trash2 } from 'lucide-react';
+import { categories } from '@/lib/categories';
 
 export default function SellPage() {
   const router = useRouter();
   const user = useAuth();
 
+  // Account type and limits
+  const [isPremium, setIsPremium] = useState(false); // TODO: Get from user profile in database
+  const [activeListingsCount, setActiveListingsCount] = useState(3); // TODO: Get actual count from database
+  const freeAccountLimit = 25;
+  const remainingFreeListings = Math.max(0, freeAccountLimit - activeListingsCount);
+
+  // Listing type selection
+  const [listingType, setListingType] = useState(''); // 'oglas' or 'drop'
+
+  // Single listing (oglas) form data
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -28,86 +40,39 @@ export default function SellPage() {
     material: []
   });
 
+  // Drop specific data
+  const [dropData, setDropData] = useState({
+    dropTitle: '',
+    dropDescription: '',
+    launchDate: '',
+    launchTime: '',
+    items: []
+  });
+
+  const [currentDropItem, setCurrentDropItem] = useState({
+    title: '',
+    description: '',
+    price: '',
+    size: '',
+    brand: '',
+    condition: 'kao-novo',
+    images: []
+  });
+
   const [images, setImages] = useState([]);
   const [errors, setErrors] = useState({});
 
-  // Detailed categories for SELLING
-  const categoriesStructure = {
-    'Žene': {
-      'Odeća': {
-        'Majice': ['Majice kratkih rukava', 'Majice dugih rukava', 'Majice na bretele', 'Tube top majice', 'Tunike', 'Bluze'],
-        'Džemperi': ['Rolke', 'Kardigani', 'Ponco', 'Ostali džemperi'],
-        'Prsluci': ['Prsluci'],
-        'Jakne': ['Kaputi', 'Mantili', 'Bunde', 'Ostale jakne'],
-        'Pantalone': ['Pantalone', 'Šorcevi', 'Trenerke'],
-        'Farmerke': ['Farmerke'],
-        'Suknje': ['Mini', 'Midi', 'Maksi', 'Denim'],
-        'Haljine': ['Mini', 'Midi', 'Maksi', 'Svečane'],
-        'Kombinezoni': ['Kombinezoni'],
-        'Setovi': ['Setovi'],
-        'Odela i sakoi': ['Sakoi', 'Odela'],
-        'Donji veš i pidžame': ['Gaćice', 'Grudnjaci', 'Shapewear', 'Bodiji', 'Setovi', 'Čarape', 'Najlonke i hulahopke', 'Bademantili', 'Pidžame'],
-        'Kupaći': ['Kupaći'],
-        'Kostimi i uniforme': ['Kostimi i uniforme']
-      },
-      'Obuća': {
-        'Patike': ['Patike za trčanje', 'Patike za šetnju', 'Patike za planinarenje', 'Cipele patike', 'Sportske patike'],
-        'Cipele': ['Cipele na štiklu', 'Ravne cipele', 'Oksfordice', 'Mokasine', 'Espadrile'],
-        'Čizme': ['Iznad kolena', 'Do kolena', 'Chelsea čizme', 'Gležnjače', 'Kaubojke', 'Ravne čizme', 'Čizme sa štiklom'],
-        'Sandale': ['Ravne sandale', 'Sandale sa štiklom'],
-        'Baletanke': ['Baletanke'],
-        'Papuče i japanke': ['Papuče', 'Japanke', 'Klompe']
-      },
-      'Aksesoari': {
-        'Torbe i rančevi': ['Torbice i pismo torbe', 'Torbe za rame', 'Poštar torbe', 'Tašne', 'Velike torbe', 'Rančevi', 'Torbe za plažu', 'Cegeri', 'Torbice oko struka', 'Torbe za laptop', 'Sportske torbe', 'Vikend torbe', 'Koferi', 'Neseseri'],
-        'Kaiš': ['Kaiš'],
-        'Novčanici': ['Novčanici'],
-        'Satovi': ['Satovi'],
-        'Nakit': ['Prstenje', 'Narukvice', 'Ogrlice', 'Privešci', 'Minđuše'],
-        'Naočare': ['Naočare za sunce', 'Naočare za vid'],
-        'Kape i šeširi': ['Kačketi', 'Šeširi', 'Kape'],
-        'Šalovi': ['Šalovi'],
-        'Rukavice': ['Rukavice'],
-        'Ostalo': ['Kisobrani', 'Privešci za ključeve', 'Maske za telefon', 'Ostalo']
-      }
-    },
-    'Muškarci': {
-      'Odeća': {
-        'Majice': ['Majice kratkih rukava', 'Majice dugih rukava', 'Majice bez rukava'],
-        'Košulje': ['Košulje'],
-        'Džemperi': ['Rolke', 'Kardigani', 'Džemperi'],
-        'Prsluci': ['Prsluci'],
-        'Jakne': ['Kaputi', 'Mantili', 'Jakne'],
-        'Pantalone': ['Farmerke', 'Pantalone', 'Šorcevi', 'Bermude', 'Trenerke'],
-        'Odela i sakoi': ['Odela', 'Sakoi'],
-        'Donji veš': ['Bokserice', 'Duge gaće', 'Čarape'],
-        'Pidžame': ['Pidžame'],
-        'Bademantili': ['Bademantili'],
-        'Kupaći': ['Kupaći'],
-        'Kostimi i uniforme': ['Kostimi i uniforme']
-      },
-      'Obuća': {
-        'Patike': ['Patike za trčanje', 'Patike za šetnju', 'Patike za planinarenje', 'Cipele patike', 'Sportske patike'],
-        'Cipele': ['Oksfordice', 'Mokasine', 'Espadrile', 'Kanadjanke', 'Radne cipele'],
-        'Čizme': ['Chelsea čizme', 'Kaubojke', 'Ostale čizme'],
-        'Sandale': ['Sandale'],
-        'Papuče i japanke': ['Papuče', 'Japanke']
-      },
-      'Aksesoari': {
-        'Torbe i rančevi': ['Torbe za rame', 'Poštar torbe', 'Velike torbe', 'Rančevi', 'Torbe za laptop', 'Sportske torbe', 'Vikend torbe', 'Koferi'],
-        'Kaiš': ['Kaiš'],
-        'Novčanici': ['Novčanici'],
-        'Satovi': ['Satovi'],
-        'Nakit': ['Prstenje', 'Narukvice', 'Ogrlice', 'Privešci'],
-        'Naočare': ['Naočare za sunce', 'Naočare za vid'],
-        'Kape i šeširi': ['Kačketi', 'Šeširi', 'Kape'],
-        'Kravate': ['Kravate'],
-        'Šalovi': ['Šalovi'],
-        'Rukavice': ['Rukavice'],
-        'Ostalo': ['Kisobrani', 'Privešci za ključeve', 'Ostalo']
-      }
-    }
-  };
+  // Get categories structure from imported categories
+  const categoriesStructure = {};
+  categories.forEach(cat => {
+    categoriesStructure[cat.label] = {};
+    cat.subcategories.forEach(subcat => {
+      categoriesStructure[cat.label][subcat.label] = {};
+      subcat.items.forEach(item => {
+        categoriesStructure[cat.label][subcat.label][item.label] = item.variants || [];
+      });
+    });
+  });
 
   // Serbian cities list
   const cities = [
@@ -175,7 +140,6 @@ export default function SellPage() {
     if (!formData.mainCategory) newErrors.mainCategory = 'Glavna kategorija je obavezna';
     if (!formData.category) newErrors.category = 'Kategorija je obavezna';
     
-    // Check if subcategory is required (when category has subcategories)
     const hasSubcategories = categoriesStructure[formData.gender]?.[formData.mainCategory]?.[formData.category]?.length > 0;
     if (hasSubcategories && !formData.detailedSubcategory) {
       newErrors.detailedSubcategory = 'Tip je obavezan';
@@ -202,6 +166,55 @@ export default function SellPage() {
     }
   };
 
+  const handleDropSubmit = (e) => {
+    e.preventDefault();
+    
+    // Validate drop
+    const newErrors = {};
+    if (!dropData.dropTitle) newErrors.dropTitle = 'Naziv dropa je obavezan';
+    if (!dropData.launchDate) newErrors.launchDate = 'Datum lansiranja je obavezan';
+    if (!dropData.launchTime) newErrors.launchTime = 'Vreme lansiranja je obavezno';
+    if (dropData.items.length === 0) newErrors.items = 'Dodajte bar jedan artikal u drop';
+    
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length === 0) {
+      console.log('Submitting drop:', dropData);
+      alert('Drop je uspešno kreiran!');
+      router.push('/profil');
+    }
+  };
+
+  const addItemToDrop = () => {
+    // Validate current item
+    if (!currentDropItem.title || !currentDropItem.price) {
+      alert('Molimo unesite naziv i cenu artikla');
+      return;
+    }
+    
+    setDropData({
+      ...dropData,
+      items: [...dropData.items, { ...currentDropItem, id: Date.now() }]
+    });
+    
+    // Reset current item form
+    setCurrentDropItem({
+      title: '',
+      description: '',
+      price: '',
+      size: '',
+      brand: '',
+      condition: 'kao-novo',
+      images: []
+    });
+  };
+
+  const removeItemFromDrop = (itemId) => {
+    setDropData({
+      ...dropData,
+      items: dropData.items.filter(item => item.id !== itemId)
+    });
+  };
+
   const getSizes = () => {
     if (formData.mainCategory === 'Obuća') {
       return sizes.shoes;
@@ -209,27 +222,305 @@ export default function SellPage() {
     return sizes.clothing;
   };
 
-  // Fix for categories that should appear as single-item arrays
   const getCategorySubcategories = () => {
     if (!formData.gender || !formData.mainCategory || !formData.category) return [];
     
     let subcats = categoriesStructure[formData.gender][formData.mainCategory][formData.category];
     
-    // If it's an empty array, add the category name as the only option
-    if (subcats.length === 0) {
+    if (!subcats || subcats.length === 0) {
       return [formData.category];
     }
     
     return subcats;
   };
 
+  // If no listing type selected, show selection screen
+  if (!listingType) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <HeaderMobile />
+        
+        <main className="pb-20 pt-14">
+          <div className="max-w-2xl mx-auto px-4 py-6">
+            <h1 className="text-2xl font-bold mb-2">Šta želiš da objaviš?</h1>
+            
+            {/* Account status card */}
+            <div className={`mb-6 p-4 rounded-lg ${isPremium ? 'bg-purple-50 border border-purple-200' : 'bg-gray-100'}`}>
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="flex items-center gap-2">
+                    {isPremium && <Crown className="w-4 h-4 text-purple-600" />}
+                    <span className="font-medium">
+                      {isPremium ? 'Premium nalog' : 'Besplatan nalog'}
+                    </span>
+                  </div>
+                  {!isPremium && (
+                    <p className="text-sm text-gray-600 mt-1">
+                      Preostalo oglasa: {remainingFreeListings}/{freeAccountLimit}
+                    </p>
+                  )}
+                </div>
+                {!isPremium && (
+                  <button 
+                    onClick={() => alert('Premium upgrade će biti dostupan uskoro!')}
+                    className="text-purple-600 text-sm font-medium"
+                  >
+                    Nadogradi
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              {/* Single listing option */}
+              <button
+                onClick={() => {
+                  if (!isPremium && remainingFreeListings === 0) {
+                    alert('Dostigli ste limit besplatnih oglasa. Nadogradite na Premium za neograničene oglase.');
+                    return;
+                  }
+                  setListingType('oglas');
+                }}
+                className="w-full p-4 bg-white rounded-lg border border-gray-200 hover:border-purple-400 transition-colors text-left"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-semibold text-lg mb-1">Pojedinačni oglas</h3>
+                    <p className="text-sm text-gray-600">Objavi jedan artikal odmah</p>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-gray-400" />
+                </div>
+              </button>
+
+              {/* Drop option */}
+              <button
+                onClick={() => {
+                  if (!isPremium) {
+                    alert('Drop funkcija je dostupna samo za Premium korisnike');
+                    return;
+                  }
+                  setListingType('drop');
+                }}
+                className={`w-full p-4 bg-white rounded-lg border ${
+                  isPremium ? 'border-gray-200 hover:border-purple-400' : 'border-gray-200 opacity-60'
+                } transition-colors text-left relative`}
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-semibold text-lg mb-1">Drop kolekciju</h3>
+                      {!isPremium && <Lock className="w-4 h-4 text-gray-400" />}
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      Objavi više artikala sa datumom lansiranja
+                    </p>
+                  </div>
+                  {isPremium && <ChevronRight className="w-5 h-5 text-gray-400" />}
+                </div>
+                {!isPremium && (
+                  <div className="absolute inset-0 bg-white/50 rounded-lg flex items-center justify-center">
+                    <span className="bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                      Premium
+                    </span>
+                  </div>
+                )}
+              </button>
+            </div>
+          </div>
+        </main>
+        
+        <BottomNav />
+      </div>
+    );
+  }
+
+  // Show drop form if drop type selected
+  if (listingType === 'drop') {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <HeaderMobile />
+        
+        <main className="pb-20 pt-14">
+          <div className="max-w-2xl mx-auto px-4 py-6">
+            <div className="flex items-center gap-4 mb-6">
+              <button onClick={() => setListingType('')} className="p-2">
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+              <h1 className="text-2xl font-bold">Kreiraj Drop</h1>
+            </div>
+
+            <form onSubmit={handleDropSubmit} className="space-y-6">
+              {/* Drop Title */}
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Naziv dropa <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={dropData.dropTitle}
+                  onChange={(e) => setDropData({...dropData, dropTitle: e.target.value})}
+                  placeholder="npr. Letnja kolekcija, Vintage drop..."
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
+                />
+                {errors.dropTitle && <p className="text-red-500 text-sm mt-1">{errors.dropTitle}</p>}
+              </div>
+
+              {/* Drop Description */}
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Opis dropa
+                </label>
+                <textarea
+                  value={dropData.dropDescription}
+                  onChange={(e) => setDropData({...dropData, dropDescription: e.target.value})}
+                  placeholder="Opiši svoju kolekciju..."
+                  rows={3}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
+                />
+              </div>
+
+              {/* Launch Date and Time */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Datum lansiranja <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <Calendar className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                    <input
+                      type="date"
+                      value={dropData.launchDate}
+                      onChange={(e) => setDropData({...dropData, launchDate: e.target.value})}
+                      min={new Date().toISOString().split('T')[0]}
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
+                    />
+                  </div>
+                  {errors.launchDate && <p className="text-red-500 text-sm mt-1">{errors.launchDate}</p>}
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Vreme lansiranja <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <Clock className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                    <input
+                      type="time"
+                      value={dropData.launchTime}
+                      onChange={(e) => setDropData({...dropData, launchTime: e.target.value})}
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
+                    />
+                  </div>
+                  {errors.launchTime && <p className="text-red-500 text-sm mt-1">{errors.launchTime}</p>}
+                </div>
+              </div>
+
+              {/* Drop Items */}
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Artikli u dropu <span className="text-red-500">*</span>
+                </label>
+                
+                {/* Current items list */}
+                {dropData.items.length > 0 && (
+                  <div className="mb-4 space-y-2">
+                    {dropData.items.map((item) => (
+                      <div key={item.id} className="p-3 bg-white rounded-lg border border-gray-200 flex items-center justify-between">
+                        <div>
+                          <p className="font-medium">{item.title}</p>
+                          <p className="text-sm text-gray-600">{item.price} RSD • Veličina: {item.size || 'N/A'}</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removeItemFromDrop(item.id)}
+                          className="p-2 text-red-500 hover:bg-red-50 rounded"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Add new item form */}
+                <div className="p-4 bg-gray-50 rounded-lg space-y-3">
+                  <h4 className="font-medium">Dodaj artikal</h4>
+                  
+                  <input
+                    type="text"
+                    value={currentDropItem.title}
+                    onChange={(e) => setCurrentDropItem({...currentDropItem, title: e.target.value})}
+                    placeholder="Naziv artikla"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
+                  />
+                  
+                  <div className="grid grid-cols-2 gap-3">
+                    <input
+                      type="number"
+                      value={currentDropItem.price}
+                      onChange={(e) => setCurrentDropItem({...currentDropItem, price: e.target.value})}
+                      placeholder="Cena (RSD)"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
+                    />
+                    
+                    <input
+                      type="text"
+                      value={currentDropItem.size}
+                      onChange={(e) => setCurrentDropItem({...currentDropItem, size: e.target.value})}
+                      placeholder="Veličina"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
+                    />
+                  </div>
+                  
+                  <input
+                    type="text"
+                    value={currentDropItem.brand}
+                    onChange={(e) => setCurrentDropItem({...currentDropItem, brand: e.target.value})}
+                    placeholder="Brend"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-400"
+                  />
+                  
+                  <button
+                    type="button"
+                    onClick={addItemToDrop}
+                    className="w-full py-2 border-2 border-dashed border-purple-400 text-purple-600 rounded-lg hover:bg-purple-50 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Dodaj u drop
+                  </button>
+                </div>
+                {errors.items && <p className="text-red-500 text-sm mt-1">{errors.items}</p>}
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                className="w-full py-3 bg-gradient-to-r from-purple-600 to-orange-500 text-white font-semibold rounded-lg hover:shadow-lg transition-shadow"
+              >
+                Kreiraj Drop
+              </button>
+            </form>
+          </div>
+        </main>
+        
+        <BottomNav />
+      </div>
+    );
+  }
+
+  // Original single listing form (with back button)
   return (
     <div className="min-h-screen bg-gray-50">
       <HeaderMobile />
       
       <main className="pb-20 pt-14">
         <div className="max-w-2xl mx-auto px-4 py-6">
-          <h1 className="text-2xl font-bold mb-6">Dodaj oglas</h1>
+          <div className="flex items-center gap-4 mb-6">
+            <button onClick={() => setListingType('')} className="p-2">
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <h1 className="text-2xl font-bold">Dodaj oglas</h1>
+          </div>
           
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Image Upload */}
@@ -250,19 +541,14 @@ export default function SellPage() {
                       onClick={() => removeImage(index)}
                       className="absolute top-2 right-2 p-1 bg-white rounded-full shadow-md"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
+                      <X className="w-4 h-4" />
                     </button>
                   </div>
                 ))}
                 
                 {images.length < 5 && (
                   <label className="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-purple-400 transition-colors">
-                    <svg className="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
+                    <Camera className="w-8 h-8 text-gray-400 mb-2" />
                     <span className="text-xs text-gray-500">Dodaj sliku</span>
                     <input
                       type="file"
@@ -339,7 +625,7 @@ export default function SellPage() {
               {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender}</p>}
             </div>
 
-            {/* Main Category (Odeća/Obuća/Aksesoari) */}
+            {/* Main Category */}
             {formData.gender && (
               <div>
                 <label className="block text-sm font-medium mb-2">
@@ -390,7 +676,7 @@ export default function SellPage() {
               </div>
             )}
 
-            {/* Detailed Subcategory (Tip) - Now REQUIRED when available */}
+            {/* Detailed Subcategory */}
             {formData.category && getCategorySubcategories().length > 0 && (
               <div>
                 <label className="block text-sm font-medium mb-2">
@@ -410,7 +696,7 @@ export default function SellPage() {
               </div>
             )}
 
-            {/* Brand - Now REQUIRED */}
+            {/* Brand */}
             <div>
               <label className="block text-sm font-medium mb-2">
                 Brend <span className="text-red-500">*</span>
@@ -445,7 +731,7 @@ export default function SellPage() {
               </div>
             )}
 
-            {/* Color - Multi-select */}
+            {/* Color */}
             <div>
               <label className="block text-sm font-medium mb-2">
                 Boja
@@ -510,7 +796,7 @@ export default function SellPage() {
               {errors.price && <p className="text-red-500 text-sm mt-1">{errors.price}</p>}
             </div>
 
-            {/* Location - Now DROPDOWN with Serbian cities */}
+            {/* Location */}
             <div>
               <label className="block text-sm font-medium mb-2">
                 Lokacija <span className="text-red-500">*</span>

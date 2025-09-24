@@ -226,7 +226,7 @@ export default function SellPage() {
     return subcats;
   };
 
-  // If no listing type selected, show selection screen
+  // If no listing type selected, show selection screen with IMPROVED STYLING
   if (!listingType) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -234,28 +234,32 @@ export default function SellPage() {
         
         <main className="pb-20 pt-14">
           <div className="max-w-2xl mx-auto px-4 py-6">
-            <h1 className="text-2xl font-bold mb-2">Šta želiš da objaviš?</h1>
+            <h1 className="text-2xl font-bold mb-6 text-center">Šta želiš da objaviš?</h1>
             
-            {/* Account status card */}
-            <div className={`mb-6 p-4 rounded-lg ${isPremium ? 'bg-purple-50 border border-purple-200' : 'bg-gray-100'}`}>
+            {/* Account status card - IMPROVED */}
+            <div className={`mb-6 p-4 rounded-2xl shadow-sm ${
+              isPremium 
+                ? 'bg-gradient-to-r from-purple-50 to-orange-50 border border-purple-200' 
+                : 'bg-white border border-gray-200'
+            }`}>
               <div className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2">
-                    {isPremium && <span>👑</span>}
-                    <span className="font-medium">
+                    {isPremium && <span className="text-2xl">👑</span>}
+                    <span className="font-semibold text-lg">
                       {isPremium ? 'Premium nalog' : 'Besplatan nalog'}
                     </span>
                   </div>
                   {!isPremium && (
                     <p className="text-sm text-gray-600 mt-1">
-                      Preostalo oglasa: {remainingFreeListings}/{freeAccountLimit}
+                      Preostalo oglasa: <span className="font-semibold text-purple-600">{remainingFreeListings}/{freeAccountLimit}</span>
                     </p>
                   )}
                 </div>
                 {!isPremium && (
                   <button 
                     onClick={() => alert('Premium upgrade će biti dostupan uskoro!')}
-                    className="text-purple-600 text-sm font-medium"
+                    className="px-4 py-2 bg-gradient-to-r from-purple-600 to-orange-500 text-white rounded-full text-sm font-semibold hover:shadow-lg transition-all"
                   >
                     Nadogradi
                   </button>
@@ -264,7 +268,7 @@ export default function SellPage() {
             </div>
 
             <div className="space-y-4">
-              {/* Single listing option */}
+              {/* Single listing option - IMPROVED */}
               <button
                 onClick={() => {
                   if (!isPremium && remainingFreeListings === 0) {
@@ -273,56 +277,65 @@ export default function SellPage() {
                   }
                   setListingType('oglas');
                 }}
-                className="w-full p-4 bg-white rounded-lg border border-gray-200 hover:border-purple-400 transition-colors text-left"
+                className="w-full p-6 bg-white rounded-2xl shadow-sm border-2 border-transparent hover:border-purple-400 hover:shadow-md transition-all text-left group"
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="font-semibold text-lg mb-1">Pojedinačni oglas</h3>
-                    <p className="text-sm text-gray-600">Objavi jedan artikal odmah</p>
+                    <h3 className="font-semibold text-xl mb-2">Pojedinačni oglas</h3>
+                    <p className="text-gray-600">Objavi jedan artikal odmah</p>
                   </div>
-                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
+                  <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-purple-100 transition-colors">
+                    <svg className="w-6 h-6 text-gray-600 group-hover:text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
                 </div>
               </button>
 
-              {/* Drop option */}
-              <button
-                onClick={() => {
-                  if (!isPremium) {
-                    alert('Drop funkcija je dostupna samo za Premium korisnike');
-                    return;
-                  }
-                  setListingType('drop');
-                }}
-                className={`w-full p-4 bg-white rounded-lg border ${
-                  isPremium ? 'border-gray-200 hover:border-purple-400' : 'border-gray-200 opacity-60'
-                } transition-colors text-left relative`}
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-lg mb-1">Drop kolekciju</h3>
-                      {!isPremium && <span>🔒</span>}
+              {/* Drop option - IMPROVED */}
+              <div className="relative">
+                <button
+                  onClick={() => {
+                    if (!isPremium) {
+                      return;
+                    }
+                    setListingType('drop');
+                  }}
+                  className={`w-full p-6 bg-white rounded-2xl shadow-sm border-2 ${
+                    isPremium 
+                      ? 'border-transparent hover:border-purple-400 hover:shadow-md cursor-pointer' 
+                      : 'border-gray-200 opacity-75 cursor-not-allowed'
+                  } transition-all text-left group`}
+                  disabled={!isPremium}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="flex items-center gap-3">
+                        <h3 className="font-semibold text-xl mb-2">Drop kolekciju</h3>
+                        {!isPremium && <span className="text-2xl">🔒</span>}
+                      </div>
+                      <p className="text-gray-600">
+                        Objavi više artikala sa datumom lansiranja
+                      </p>
                     </div>
-                    <p className="text-sm text-gray-600">
-                      Objavi više artikala sa datumom lansiranja
-                    </p>
+                    {isPremium && (
+                      <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-purple-100 transition-colors">
+                        <svg className="w-6 h-6 text-gray-600 group-hover:text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </div>
+                    )}
                   </div>
-                  {isPremium && (
-                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  )}
-                </div>
+                </button>
+                
                 {!isPremium && (
-                  <div className="absolute inset-0 bg-white/50 rounded-lg flex items-center justify-center">
-                    <span className="bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                      Premium
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-orange-600/10 rounded-2xl flex items-center justify-center backdrop-blur-sm pointer-events-none">
+                    <span className="bg-gradient-to-r from-purple-600 to-orange-500 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+                      Samo Premium
                     </span>
                   </div>
                 )}
-              </button>
+              </div>
             </div>
           </div>
         </main>
@@ -512,7 +525,7 @@ export default function SellPage() {
     );
   }
 
-  // Original single listing form (with back button)
+  // Original single listing form (with back button) - ALL THE REST STAYS THE SAME
   return (
     <div className="min-h-screen bg-gray-50">
       <HeaderMobile />
@@ -575,7 +588,6 @@ export default function SellPage() {
               <p className="text-xs text-gray-500 mt-2">Možete dodati do 5 slika</p>
             </div>
 
-            {/* All the original form fields continue here unchanged... */}
             {/* Title */}
             <div>
               <label className="block text-sm font-medium mb-2">

@@ -27,7 +27,7 @@ export default function SearchPage() {
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [selectedConditions, setSelectedConditions] = useState([]);
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(50000);
+  const [maxPrice, setMaxPrice] = useState(1000000);
   const [brandFilter, setBrandFilter] = useState('');
   const [showFilters, setShowFilters] = useState(false);
 
@@ -352,9 +352,9 @@ export default function SearchPage() {
                   <label className="text-xs text-ink2 mb-1 block">Do</label>
                   <input
                     type="number"
-                    placeholder="50000"
+                    placeholder="1000000"
                     value={maxPrice}
-                    onChange={(e) => setMaxPrice(Number(e.target.value) || 50000)}
+                    onChange={(e) => setMaxPrice(Number(e.target.value) || 1000000)}
                     className="w-full px-3 py-2 border border-black/10 rounded-lg focus:outline-none focus:border-purple"
                   />
                 </div>
@@ -382,7 +382,7 @@ export default function SearchPage() {
                 setSelectedSizes([]);
                 setSelectedConditions([]);
                 setMinPrice(0);
-                setMaxPrice(50000);
+                setMaxPrice(1000000);
                 setSelectedGender('sve');
                 setBrandFilter('');
               }}
